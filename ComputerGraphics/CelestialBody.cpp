@@ -27,7 +27,6 @@ void CelestialBody::Tick(const float delta)
 		glm::vec3 scale = t.GetScale();
 
 		ImGui::Begin(name.c_str());
-		ImGui::Text(std::format("Parent: {}", reinterpret_cast<unsigned long long>(parent)).c_str());
 		ImGui::Text(std::format("Position: {}, {}, {}", pos.x, pos.y, pos.z).c_str());
 		ImGui::Text(std::format("Rotation: {}, {}, {}", rot.x, rot.y, rot.z).c_str());
 		ImGui::Text(std::format("Scale: {}, {}, {}", scale.x, scale.y, scale.z).c_str());
