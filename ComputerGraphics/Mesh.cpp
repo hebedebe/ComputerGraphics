@@ -1,6 +1,7 @@
 #include "Mesh.h"
 
 #include "gl_core_4_4.h"
+#include <numbers>
 
 Mesh::~Mesh()
 {
@@ -169,6 +170,83 @@ void Mesh::InitialisePyramid()
 	};
 
 	Initialise(8, vertices, indexCount, indices);
+}
+
+void Mesh::InitialiseCylinder(float radius, float height, const unsigned int segments)
+{
+	// Check that the mesh is not initialised already
+	assert(vao == 0);
+	assert(segments >= 3);
+
+	// Define vertices
+	const unsigned int vertexCount = segments * 2 + 2;
+	Vertex* vertices = new Vertex[vertexCount];
+
+	// Bottom and top center points
+	int topCenterVertexIndex = 0;
+	int bottomCenterVertexIndex = 1;
+	vertices[topCenterVertexIndex].position = { 0.f, height / 2.f, 0.f, 1 };
+	vertices[bottomCenterVertexIndex].position = {0.f, -height / 2.f, 0.f, 1};
+
+	// Define indices
+	const unsigned int indexCount = 12 * segments;
+	unsigned int* indices = new unsigned int[indexCount];
+
+	// Vertex loop
+	const float segmentAngle = 2.f * std::numbers::pi_v<float> / (float)segments;
+	for (unsigned int i = 0; i < segments; i++)
+	{
+		const float angle = segmentAngle * (float)i;
+
+		glm::vec3 direction = glm::vec3(cos(angle), 0, sin(angle));
+
+		glm::vec3 positionCenter = (direction * radius);
+		glm::vec3 positionTop = positionCenter + glm::vec3(0, height / 2.f, 0);
+		glm::vec3 positionBottom = positionCenter - glm::vec3(0, height / 2.f, 0);
+
+		//Get vertex start
+		const int vertexStart = (int)i * 2 + 2;
+		vertices[vertexStart + 0].position = glm::vec4(positionTop, 1);
+		vertices[vertexStart + 1].position = glm::vec4(positionBottom, 1);
+	}
+
+	//Index loop
+	for (unsigned int i = 0; i < segments; i++)
+	{
+		const int vertexOffset = (int)i * 2 + 2;
+
+		const int topRightIndex = vertexOffset;
+		const int bottomRightIndex = vertexOffset + 1;
+
+		const int topLeftIndex = (vertexOffset % (vertexCount-2)) + 2;
+		const int bottomLeftIndex = ((vertexOffset + 1) % (vertexCount-2)) + 2;
+
+		const int indexOffset = i * 12;
+
+		// Top face
+		indices[indexOffset + 0] = topCenterVertexIndex;
+		indices[indexOffset + 1] = topLeftIndex;
+		indices[indexOffset + 2] = topRightIndex;
+
+		// Bottom face
+		indices[indexOffset + 3] = bottomCenterVertexIndex;
+		indices[indexOffset + 4] = bottomLeftIndex;
+		indices[indexOffset + 5] = bottomRightIndex;
+
+		// Side faces
+		indices[indexOffset + 6] = bottomLeftIndex;
+		indices[indexOffset + 7] = topRightIndex;
+		indices[indexOffset + 8] = topLeftIndex;
+
+		indices[indexOffset + 9] = bottomRightIndex;
+		indices[indexOffset + 10] = topRightIndex;
+		indices[indexOffset + 11] = bottomLeftIndex;
+	}
+
+	Initialise(vertexCount, vertices, indexCount, indices);
+
+	delete[] vertices;
+	delete[] indices;
 }
 
 void Mesh::Draw()

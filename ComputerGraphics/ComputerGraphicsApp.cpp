@@ -47,7 +47,7 @@ bool ComputerGraphicsApp::startup() {
 	}
 
 
-	m_quadMesh.InitialisePyramid();
+	m_quadMesh.InitialiseCylinder(0.5, 1.f, 5);
 
 	// Make the quad 10 units wide
 	m_quadTransform.SetScale(vec3(10));
@@ -107,7 +107,7 @@ void ComputerGraphicsApp::update(float deltaTime) {
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
 
-	m_quadTransform.matrix = rotate(m_quadTransform.matrix, m_quadTransform.GetRotation().y + deltaTime, vec3(0, 1, 0));
+	m_quadTransform.matrix = rotate(m_quadTransform.matrix, m_quadTransform.GetRotation().y + deltaTime * m_timeScale, vec3(0, 1, 0));
 
 }
 

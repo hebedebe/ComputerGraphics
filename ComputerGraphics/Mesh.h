@@ -22,6 +22,7 @@ public:
 	void InitialiseQuad();
 	void InitialiseCube();
 	void InitialisePyramid();
+	void InitialiseCylinder(float radius=0.5f, float height=1.f, unsigned int segments = 12);
 
 	virtual void Draw();
 
