@@ -88,13 +88,10 @@ void ComputerGraphicsApp::update(float deltaTime) {
 	m_viewMatrix = glm::lookAt(vec3(m_cameraDistance - scroll*5), vec3(0), vec3(0, 1, 0));
 	m_projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 1000.0f);
 
-	ImGui::Begin("Settings");
+	ImGui::Begin("Debug");
 	ImGui::ColorEdit4("Background Colour", glm::value_ptr(m_backgroundColour));
 	ImGui::SliderFloat("Timescale", &m_timeScale, 0.1, 15, "%.3f", 3);
 	if (ImGui::Button("Reset timescale")) m_timeScale = 1.f;
-	ImGui::End();
-
-	ImGui::Begin("Debug");
 	ImGui::Text(std::format("Fps: {}", getFPS()).c_str());
 	bool newVsync = m_vsync;
 	ImGui::Checkbox("VSync", &newVsync);
