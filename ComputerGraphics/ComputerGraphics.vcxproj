@@ -175,18 +175,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
-    <ClCompile Include="CelestialBody.cpp" />
     <ClCompile Include="ComputerGraphicsApp.cpp" />
-    <ClCompile Include="Disc.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
-    <ClInclude Include="CelestialBody.h" />
     <ClInclude Include="ComputerGraphicsApp.h" />
     <ClInclude Include="Constants.h" />
-    <ClInclude Include="Disc.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

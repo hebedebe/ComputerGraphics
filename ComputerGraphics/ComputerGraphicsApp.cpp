@@ -8,8 +8,6 @@
 #include <glm/ext.hpp>
 
 #include "Actor.h"
-#include "CelestialBody.h"
-#include "Disc.h"
 #include "imgui.h"
 #include "Transform.h"
 
@@ -38,59 +36,6 @@ bool ComputerGraphicsApp::startup() {
 	// create simple camera transforms
 	m_viewMatrix = glm::lookAt(vec3(150), vec3(0), vec3(0, 1, 0));
 	m_projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 1000.0f);
-
-	auto origin = new Actor(Transform());
-	auto sun = new CelestialBody(Transform(), 15, YELLOW, 0.1, nullptr, "Sun");
-	auto mercury = new CelestialBody(Transform(glm::vec3(0,0,20)), 0.3, RED, 365.f/176, nullptr, "Mercury");
-	auto mercuryContainer = new CelestialBody(Transform(glm::vec3(0,0,0)), 0, RED, 365.f/176);
-	auto venus = new CelestialBody(Transform(glm::vec3(0,0,30)), 0.6, RED, 365.f/225, nullptr, "Venus");
-	auto venusContainer = new CelestialBody(Transform(glm::vec3(0,0,0)), 0, RED, 365.f/225);
-	auto earth = new CelestialBody(Transform(glm::vec3(0,0, 40)), 0.6, RED, 365.f/365, nullptr, "Earth");
-	auto earthContainer = new CelestialBody(Transform(glm::vec3(0,0, 0)), 0, RED, 365.f/365);
-	auto mars = new CelestialBody(Transform(glm::vec3(0,0,50)), 0.2, RED, 365.f/687, nullptr, "Mars");
-	auto marsContainer = new CelestialBody(Transform(glm::vec3(0,0,0)), 0, RED, 365.f/687);
-	auto jupiter = new CelestialBody(Transform(glm::vec3(0,0,60)), 6.9, RED, 365.f/365*12, nullptr, "Jupiter");
-	auto jupiterContainer = new CelestialBody(Transform(glm::vec3(0,0,0)), 0, RED, 365.f/365/12);
-	auto saturn = new CelestialBody(Transform(glm::vec3(0,0,85)), 5.8, RED, 365.f/365/29.4, nullptr, "Saturn");
-	auto saturnContainer = new CelestialBody(Transform(glm::vec3(0,0,0)), 0, RED, 365.f/365/29.4);
-	auto uranus = new CelestialBody(Transform(glm::vec3(0,0,100)), 2.5, RED, 365.f/365/84, nullptr, "Uranus");
-	auto uranusContainer = new CelestialBody(Transform(glm::vec3(0,0,0)), 0, RED, 365.f/365/84);
-	auto neptune = new CelestialBody(Transform(glm::vec3(0,0,115)), 2.4, RED, 365.f/365/165, nullptr, "Neptune");
-	auto neptuneContainer = new CelestialBody(Transform(glm::vec3(0,0,0)), 0, RED, 365.f/365/165);
-
-	origin->AddChild(sun);
-
-	sun->AddChild(mercuryContainer);
-	sun->AddChild(venusContainer);
-	sun->AddChild(earthContainer);
-	sun->AddChild(marsContainer);
-	sun->AddChild(jupiterContainer);
-	sun->AddChild(saturnContainer);
-	sun->AddChild(uranusContainer);
-	sun->AddChild(neptuneContainer);
-
-	mercuryContainer->AddChild(mercury);
-	venusContainer->AddChild(venus);
-	earthContainer->AddChild(earth);
-	marsContainer->AddChild(mars);
-	jupiterContainer->AddChild(jupiter);
-	saturnContainer->AddChild(saturn);
-	uranusContainer->AddChild(uranus);
-	neptuneContainer->AddChild(neptune);
-
-	auto moonContainer = new CelestialBody(Transform(), 0, RED, 1);
-	auto moon = new CelestialBody(Transform(vec3(0, 0, 2)), 0.2, RED, 1, nullptr, "Moon");
-
-	earth->AddChild(moonContainer);
-	moonContainer->AddChild(moon);
-
-	auto saturnDisc = new Disc(Transform(), 6.5, 8, GREEN);
-	auto jupiterDisc = new Disc(Transform(), 8, 11, GREEN);
-	auto neptuneDisc = new Disc(Transform(), 3, 4.5, GREEN);
-
-	saturn->AddChild(saturnDisc);
-	jupiter->AddChild(jupiterDisc);
-	neptune->AddChild(neptuneDisc);
 
 
 	return true;
