@@ -21,6 +21,7 @@ public:
 
 	void InitialiseQuad();
 	void InitialiseCube();
+	void InitialisePyramid();
 
 	virtual void Draw();
 

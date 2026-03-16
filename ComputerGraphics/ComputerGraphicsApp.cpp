@@ -47,7 +47,7 @@ bool ComputerGraphicsApp::startup() {
 	}
 
 
-	m_quadMesh.InitialiseCube();
+	m_quadMesh.InitialisePyramid();
 
 	// Make the quad 10 units wide
 	m_quadTransform.SetScale(vec3(10));

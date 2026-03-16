@@ -137,6 +137,40 @@ void Mesh::InitialiseCube()
 	Initialise(8, vertices, indexCount, indices);
 }
 
+void Mesh::InitialisePyramid()
+{
+	// Check that the mesh is not initialised already
+	assert(vao == 0);
+
+	// Define 5 vertices for 10 triangles
+	Vertex vertices[5];
+
+	// Bottom face
+	vertices[0].position = { -0.5f, -0.5, 0.5f, 1 };
+	vertices[1].position = { 0.5f, -0.5, 0.5f, 1 };
+	vertices[2].position = { -0.5f, -0.5, -0.5f, 1 };
+	vertices[3].position = { 0.5f, -0.5, -0.5f, 1 };
+
+	// Top point
+	vertices[4].position = { 0.f, 0.5f, 0.f, 1 };
+
+	constexpr unsigned int indexCount = 18;
+	const unsigned int indices[indexCount] = {
+		2, 1, 0, //Bottom
+		3, 1, 2,
+
+		0, 1, 4, // Back
+
+		2, 0, 4, // Left
+
+		3, 2, 4, // Front
+
+		1, 3, 4 // Right
+	};
+
+	Initialise(8, vertices, indexCount, indices);
+}
+
 void Mesh::Draw()
 {
 	glBindVertexArray(vao);
