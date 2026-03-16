@@ -230,8 +230,8 @@ void Mesh::InitialiseCylinder(float radius, float height, const unsigned int seg
 
 		// Bottom face
 		indices[indexOffset + 3] = bottomCenterVertexIndex;
-		indices[indexOffset + 4] = bottomLeftIndex;
-		indices[indexOffset + 5] = bottomRightIndex;
+		indices[indexOffset + 4] = bottomRightIndex;
+		indices[indexOffset + 5] = bottomLeftIndex;
 
 		// Side faces
 		indices[indexOffset + 6] = bottomLeftIndex;
