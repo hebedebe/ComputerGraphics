@@ -29,6 +29,7 @@ ComputerGraphicsApp* ComputerGraphicsApp::Get()
 
 bool ComputerGraphicsApp::startup() {
 	
+	auto startTime = getTime();
 	setBackgroundColour(0.25f, 0.25f, 0.25f);
 
 	// initialise gizmo primitive counts
@@ -47,8 +48,9 @@ bool ComputerGraphicsApp::startup() {
 		return false;
 	}
 
+	m_quadMesh.InitialiseCone();
+	std::cout << "Startup completed in " << getTime() - startTime << " seconds\n";
 
-	m_quadMesh.InitialiseCylinder(0.5, 1.f, 5);
 
 	// Make the quad 10 units wide
 	m_quadTransform.SetScale(vec3(10));

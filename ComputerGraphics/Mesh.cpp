@@ -1,5 +1,7 @@
 #include "Mesh.h"
 
+#include <iostream>
+
 #include "gl_core_4_4.h"
 #include <numbers>
 
@@ -172,19 +174,24 @@ void Mesh::InitialisePyramid()
 	Initialise(8, vertices, indexCount, indices);
 }
 
-void Mesh::InitialiseCylinder(float radius, float height, const unsigned int segments)
+void Mesh::InitialiseCylinder(const float radius, const float height, const unsigned int segments)
 {
 	// Check that the mesh is not initialised already
 	assert(vao == 0);
-	assert(segments >= 3);
+	assert(segments <= INT_MAX);
+
+	if (segments < 2)
+	{
+		std::cout << "Warning: Cylinder has less than 2 sides, it may be invisible.";
+	}
 
 	// Define vertices
 	const unsigned int vertexCount = segments * 2 + 2;
 	Vertex* vertices = new Vertex[vertexCount];
 
 	// Bottom and top center points
-	int topCenterVertexIndex = 0;
-	int bottomCenterVertexIndex = 1;
+	constexpr int topCenterVertexIndex = 0;
+	constexpr int bottomCenterVertexIndex = 1;
 	vertices[topCenterVertexIndex].position = { 0.f, height / 2.f, 0.f, 1 };
 	vertices[bottomCenterVertexIndex].position = {0.f, -height / 2.f, 0.f, 1};
 
@@ -241,6 +248,72 @@ void Mesh::InitialiseCylinder(float radius, float height, const unsigned int seg
 		indices[indexOffset + 9] = bottomRightIndex;
 		indices[indexOffset + 10] = topRightIndex;
 		indices[indexOffset + 11] = bottomLeftIndex;
+	}
+
+	Initialise(vertexCount, vertices, indexCount, indices);
+
+	delete[] vertices;
+	delete[] indices;
+}
+
+void Mesh::InitialiseCone(float radius, float height, unsigned int segments)
+{
+	// Check that the mesh is not initialised already
+	assert(vao == 0);
+	assert(segments <= INT_MAX);
+
+	if (segments < 2)
+	{
+		std::cout << "Warning: Cylinder has less than 2 sides, it may be invisible.";
+	}
+
+	// Define vertices
+	const unsigned int vertexCount = segments + 2;
+	Vertex* vertices = new Vertex[vertexCount];
+
+	// Bottom and top center points
+	constexpr int topCenterVertexIndex = 0;
+	constexpr int bottomCenterVertexIndex = 1;
+	vertices[topCenterVertexIndex].position = { 0.f, height, 0.f, 1 };
+	vertices[bottomCenterVertexIndex].position = { 0.f, 0.f, 0.f, 1 };
+
+	// Define indices
+	const unsigned int indexCount = 6 * segments;
+	unsigned int* indices = new unsigned int[indexCount];
+
+	// Vertex loop
+	const float segmentAngle = 2.f * std::numbers::pi_v<float> / (float)segments;
+	for (unsigned int i = 0; i < segments; i++)
+	{
+		const float angle = segmentAngle * (float)i;
+
+		glm::vec3 direction = glm::vec3(cos(angle), 0, sin(angle));
+		glm::vec3 position = direction * radius;
+
+		//Get vertex start
+		const int vertexOffset = (int)i + 2;
+		vertices[vertexOffset].position = glm::vec4(position, 1);
+	}
+
+	//Index loop
+	for (unsigned int i = 0; i < segments; i++)
+	{
+		const int vertexOffset = (int)i + 2;
+
+		const int bottomRightIndex = vertexOffset;
+		const int bottomLeftIndex = vertexOffset + 1 > vertexCount-1 ? 2 : vertexOffset+1;
+
+		const int indexOffset = i * 6;
+
+		// Top face
+		indices[indexOffset + 0] = topCenterVertexIndex;
+		indices[indexOffset + 1] = bottomLeftIndex;
+		indices[indexOffset + 2] = bottomRightIndex;
+
+		// Bottom face
+		indices[indexOffset + 3] = bottomCenterVertexIndex;
+		indices[indexOffset + 4] = bottomRightIndex;
+		indices[indexOffset + 5] = bottomLeftIndex;
 	}
 
 	Initialise(vertexCount, vertices, indexCount, indices);
