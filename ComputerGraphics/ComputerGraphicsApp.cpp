@@ -34,9 +34,23 @@ bool ComputerGraphicsApp::startup() {
 	Gizmos::create(10000, 10000, 10000, 10000);
 
 	// create simple camera transforms
-	m_viewMatrix = glm::lookAt(vec3(150), vec3(0), vec3(0, 1, 0));
+	m_viewMatrix = glm::lookAt(vec3(m_cameraDistance), vec3(0), vec3(0, 1, 0));
 	m_projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 1000.0f);
 
+	m_shader.loadShader(aie::eShaderStage::VERTEX, "./shaders/simple.vert");
+	m_shader.loadShader(aie::eShaderStage::FRAGMENT, "./shaders/simple.frag");
+
+	if (m_shader.link() == false)
+	{
+		printf("Shader Error: %s\n", m_shader.getLastError());
+		return false;
+	}
+
+
+	m_quadMesh.InitialiseCube();
+
+	// Make the quad 10 units wide
+	m_quadTransform.SetScale(vec3(10));
 
 	return true;
 }
@@ -92,6 +106,9 @@ void ComputerGraphicsApp::update(float deltaTime) {
 
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
+
+	m_quadTransform.matrix = rotate(m_quadTransform.matrix, m_quadTransform.GetRotation().y + deltaTime, vec3(0, 1, 0));
+
 }
 
 void ComputerGraphicsApp::draw() {
@@ -110,6 +127,16 @@ void ComputerGraphicsApp::draw() {
 	}
 
 	Gizmos::draw(m_projectionMatrix * m_viewMatrix);
+
+	// Bind shader
+	m_shader.bind();
+
+	// Bind transform
+	auto pvm = m_projectionMatrix * m_viewMatrix * m_quadTransform.matrix;
+	m_shader.bindUniform("ProjectionViewModel", pvm);
+
+	// Draw quad
+	m_quadMesh.Draw();
 }
 
 void ComputerGraphicsApp::AddToFreeQueue(Actor* body)
