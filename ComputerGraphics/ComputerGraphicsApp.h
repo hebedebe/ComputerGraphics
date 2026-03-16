@@ -47,4 +47,6 @@ protected:
 
 	std::vector<Actor*> m_actors;
 	std::vector<Actor*> m_freeQueue;
+
+	bool m_vsync = true;
 };

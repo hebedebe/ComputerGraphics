@@ -1,12 +1,13 @@
 #include "ComputerGraphicsApp.h"
 
 #include <iostream>
+#include <format>
 
-#include "Gizmos.h"
-#include "Input.h"
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
+#include "Gizmos.h"
+#include "Input.h"
 #include "Actor.h"
 #include "imgui.h"
 #include "Transform.h"
@@ -92,6 +93,18 @@ void ComputerGraphicsApp::update(float deltaTime) {
 	ImGui::SliderFloat("Timescale", &m_timeScale, 0.1, 15, "%.3f", 3);
 	if (ImGui::Button("Reset timescale")) m_timeScale = 1.f;
 	ImGui::End();
+
+	ImGui::Begin("Debug");
+	ImGui::Text(std::format("Fps: {}", getFPS()).c_str());
+	bool newVsync = m_vsync;
+	ImGui::Checkbox("VSync", &newVsync);
+	if (m_vsync != newVsync)
+	{
+		setVSync(newVsync);
+		m_vsync = newVsync;
+	}
+	ImGui::End();
+
 
 	for (const auto actor : m_actors)
 	{
