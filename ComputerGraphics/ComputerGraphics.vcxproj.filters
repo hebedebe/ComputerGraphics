@@ -49,7 +49,7 @@
       <Filter>Source Files\Nodes</Filter>
     </ClCompile>
     <ClCompile Include="CameraNode.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Nodes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -84,7 +84,7 @@
       <Filter>Header Files\Nodes</Filter>
     </ClInclude>
     <ClInclude Include="CameraNode.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Nodes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
