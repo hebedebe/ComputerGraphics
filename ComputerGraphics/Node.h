@@ -8,11 +8,12 @@
 class Node
 {
 public:
-	Node(const Transform& transform, Node* parent = nullptr, std::string name = "Node");
-	virtual ~Node();
+	explicit Node(const Transform& transform, Node* parent = nullptr, std::string name = "Node");
+	~Node();
 
 public:
 	virtual void Tick(float delta);
+	virtual void PreDraw();
 	virtual void Draw();
 
 	void Free();
@@ -21,7 +22,7 @@ public:
 	void RemoveChild(Node* actor);
 	void AddChild(Node* actor);
 
-	Transform GlobalTransform() const;
+	[[nodiscard]] Transform GlobalTransform() const;
 
 	template<typename T>
 	T* As() { return dynamic_cast<T*>(this); }
@@ -35,6 +36,6 @@ public:
 	bool visible = true;
 
 protected:
-	void OnDestroy();
+	virtual void OnDestroy();
 };
 

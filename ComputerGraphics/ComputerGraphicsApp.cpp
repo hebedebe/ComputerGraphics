@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
+#include "CameraNode.h"
 #include "Gizmos.h"
 #include "Input.h"
 #include "Node.h"
@@ -37,10 +38,6 @@ bool ComputerGraphicsApp::startup() {
 	// initialise gizmo primitive counts
 	Gizmos::create(10000, 10000, 10000, 10000);
 
-	// create simple camera transforms
-	m_viewMatrix = glm::lookAt(vec3(m_cameraDistance), vec3(0), vec3(0, 1, 0));
-	m_projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 1000.0f);
-
 	auto bunnyMesh = new MeshNode(Transform());
 	bunnyMesh->LoadShader(aie::eShaderStage::VERTEX, "./shaders/simple.vert");
 	bunnyMesh->LoadShader(aie::eShaderStage::FRAGMENT, "./shaders/simple.frag");
@@ -69,6 +66,14 @@ bool ComputerGraphicsApp::startup() {
 	buddhaMesh->transform.SetScale(vec3(0.5));
 	auto buddhaMotion = new MotionNode(Transform(), Transform(vec3(0), vec3(0, 1, 0), vec3(0)));
 	buddhaMesh->AddChild(buddhaMotion);
+
+	auto camera = new CameraNode(Transform(vec3(0, 5, 10), vec3(-0.5f, 0, 0)));
+	camera->SetActive(true);
+
+	m_viewMatrix = glm::lookAt(vec3(10 * 5.f), vec3(0), vec3(0, 1, 0));
+	m_projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 1000.0f);
+
+	camera->transform.matrix = glm::lookAt(vec3(10, 5, 10), vec3(0), vec3(0, 1, 0));
 
 	std::cout << "Startup completed in " << getTime() - startTime << " seconds\n";
 	return true;
@@ -102,13 +107,9 @@ void ComputerGraphicsApp::update(float deltaTime) {
 	// quit if we press escape
 	aie::Input* input = aie::Input::getInstance();
 
-	auto scroll = input->getMouseScroll();
-	m_viewMatrix = glm::lookAt(vec3(m_cameraDistance - scroll*5), vec3(0), vec3(0, 1, 0));
-	m_projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 1000.0f);
-
 	ImGui::Begin("Debug");
 	ImGui::ColorEdit4("Background Colour", glm::value_ptr(m_backgroundColour));
-	ImGui::SliderFloat("Timescale", &m_timeScale, 0.1, 15, "%.3f", 3);
+	ImGui::SliderFloat("Timescale", &m_timeScale, 0.1f, 15, "%.3f", 3);
 	if (ImGui::Button("Reset timescale")) m_timeScale = 1.f;
 	ImGui::Text(std::format("Fps: {}", getFPS()).c_str());
 	bool newVsync = m_vsync;
@@ -121,14 +122,14 @@ void ComputerGraphicsApp::update(float deltaTime) {
 	ImGui::End();
 
 
-	for (const auto actor : m_actors)
+	for (const auto node : m_nodes)
 	{
-		actor->Tick(deltaTime*m_timeScale);
+		node->Tick(deltaTime*m_timeScale);
 	}
 
-	for (const auto actor : m_freeQueue)
+	for (const auto node : m_freeQueue)
 	{
-		actor->Free();
+		node->Free();
 	}
 	m_freeQueue.clear();
 
@@ -143,31 +144,46 @@ void ComputerGraphicsApp::draw() {
 	setBackgroundColour(m_backgroundColour.r, m_backgroundColour.g, m_backgroundColour.b, m_backgroundColour.a);
 	clearScreen();
 
-	// update perspective based on screen size
-	m_projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, getWindowWidth() / (float)getWindowHeight(), 0.1f, 1000.0f);
-
-	for (const auto actor : m_actors)
+	for (const auto node : m_preDrawNodes)
 	{
-		if (actor->visible)
-			actor->Draw();
+		node->PreDraw();
+	}
+
+	for (const auto node : m_nodes)
+	{
+		if (node->visible)
+			node->Draw();
 	}
 
 	Gizmos::draw(m_projectionMatrix * m_viewMatrix);
 }
 
-void ComputerGraphicsApp::AddToFreeQueue(Node* body)
+void ComputerGraphicsApp::AddToFreeQueue(Node* node)
 {
-	m_freeQueue.emplace_back(body);
+	m_freeQueue.emplace_back(node);
 }
 
-void ComputerGraphicsApp::RegisterBody(Node* body)
+void ComputerGraphicsApp::RegisterNode(Node* node)
 {
-	m_actors.emplace_back(body);
+	m_nodes.emplace_back(node);
 }
 
-void ComputerGraphicsApp::RemoveBody(Node* body)
+void ComputerGraphicsApp::RemoveNode(Node* node)
 {
-	m_actors.erase(std::ranges::find(m_actors, body));
+	m_nodes.erase(std::ranges::find(m_nodes, node));
+}
+
+void ComputerGraphicsApp::RegisterPreDraw(Node* node)
+{
+	m_preDrawNodes.emplace_back(node);
+}
+
+void ComputerGraphicsApp::RemovePreDraw(Node* node)
+{
+	const auto iter = std::ranges::find(m_preDrawNodes, node);
+	if (iter != m_preDrawNodes.end())
+		m_preDrawNodes.erase(iter);
+
 }
 
 ComputerGraphicsApp::ComputerGraphicsApp()

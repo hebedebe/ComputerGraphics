@@ -9,7 +9,7 @@ Node::Node(const Transform& transform, Node* parent, std::string name)
 {
 	if (parent)
 		parent->AddChild(this);
-	ComputerGraphicsApp::Get()->RegisterBody(this);
+	ComputerGraphicsApp::Get()->RegisterNode(this);
 }
 
 Node::~Node()
@@ -27,6 +27,10 @@ void Node::Tick(float delta)
 {
 }
 
+void Node::PreDraw()
+{
+}
+
 void Node::Draw()
 {
 }
@@ -35,7 +39,7 @@ void Node::Free()
 {
 	if (parent)
 		parent->RemoveChild(this);
-	ComputerGraphicsApp::Get()->RemoveBody(this);
+	ComputerGraphicsApp::Get()->RemoveNode(this);
 	delete this;
 }
 
