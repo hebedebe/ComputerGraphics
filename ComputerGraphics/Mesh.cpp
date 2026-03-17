@@ -301,7 +301,7 @@ void Mesh::InitialiseCone(float radius, float height, unsigned int segments)
 		const int vertexOffset = (int)i + 2;
 
 		const int bottomRightIndex = vertexOffset;
-		const int bottomLeftIndex = vertexOffset + 1 > vertexCount-1 ? 2 : vertexOffset+1;
+		const int bottomLeftIndex = vertexOffset + 1 > (int)vertexCount-1 ? 2 : vertexOffset+1;
 
 		const int indexOffset = (int)i * 6;
 
