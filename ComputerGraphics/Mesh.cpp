@@ -256,7 +256,7 @@ void Mesh::InitialiseCylinder(const float radius, const float height, const unsi
 	delete[] indices;
 }
 
-void Mesh::InitialiseCone(float radius, float height, unsigned int segments)
+void Mesh::InitialiseCone(const float radius, float height, const unsigned int segments)
 {
 	// Check that the mesh is not initialised already
 	assert(vao == 0);

@@ -8,8 +8,10 @@
 
 #include "Gizmos.h"
 #include "Input.h"
-#include "Actor.h"
+#include "Node.h"
 #include "imgui.h"
+#include "MeshNode.h"
+#include "MotionNode.h"
 #include "Transform.h"
 
 using glm::vec3;
@@ -39,22 +41,36 @@ bool ComputerGraphicsApp::startup() {
 	m_viewMatrix = glm::lookAt(vec3(m_cameraDistance), vec3(0), vec3(0, 1, 0));
 	m_projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 1000.0f);
 
-	m_shader.loadShader(aie::eShaderStage::VERTEX, "./shaders/simple.vert");
-	m_shader.loadShader(aie::eShaderStage::FRAGMENT, "./shaders/simple.frag");
+	auto bunnyMesh = new MeshNode(Transform());
+	bunnyMesh->LoadShader(aie::eShaderStage::VERTEX, "./shaders/simple.vert");
+	bunnyMesh->LoadShader(aie::eShaderStage::FRAGMENT, "./shaders/simple.frag");
+	bunnyMesh->LinkShader();
+	bunnyMesh->LoadMesh("./models/bunny.obj");
+	bunnyMesh->transform.SetScale(vec3(0.5));
+	auto bunnyMotion = new MotionNode(Transform(), Transform(vec3(0), vec3(0,1,0), vec3(0)));
+	bunnyMesh->AddChild(bunnyMotion);
 
-	if (m_shader.link() == false)
-	{
-		printf("Shader Error: %s\n", m_shader.getLastError());
-		return false;
-	}
+	auto dragonMesh = new MeshNode(Transform(vec3(0,0,-5)));
+	bunnyMesh->AddChild(dragonMesh);
+	dragonMesh->LoadShader(aie::eShaderStage::VERTEX, "./shaders/simple.vert");
+	dragonMesh->LoadShader(aie::eShaderStage::FRAGMENT, "./shaders/simple.frag");
+	dragonMesh->LinkShader();
+	dragonMesh->LoadMesh("./models/dragon.obj");
+	dragonMesh->transform.SetScale(vec3(0.5));
+	auto dragonMotion = new MotionNode(Transform(), Transform(vec3(0), vec3(0, 1, 0), vec3(0)));
+	dragonMesh->AddChild(dragonMotion);
 
-	m_quadMesh.InitialiseCone();
+	auto buddhaMesh = new MeshNode(Transform(vec3(0, 0, 5)));
+	bunnyMesh->AddChild(buddhaMesh);
+	buddhaMesh->LoadShader(aie::eShaderStage::VERTEX, "./shaders/simple.vert");
+	buddhaMesh->LoadShader(aie::eShaderStage::FRAGMENT, "./shaders/simple.frag");
+	buddhaMesh->LinkShader();
+	buddhaMesh->LoadMesh("./models/buddha.obj");
+	buddhaMesh->transform.SetScale(vec3(0.5));
+	auto buddhaMotion = new MotionNode(Transform(), Transform(vec3(0), vec3(0, 1, 0), vec3(0)));
+	buddhaMesh->AddChild(buddhaMotion);
+
 	std::cout << "Startup completed in " << getTime() - startTime << " seconds\n";
-
-
-	// Make the quad 10 units wide
-	m_quadTransform.SetScale(vec3(10));
-
 	return true;
 }
 
@@ -119,8 +135,6 @@ void ComputerGraphicsApp::update(float deltaTime) {
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
 
-	m_quadTransform.matrix = rotate(m_quadTransform.matrix, m_quadTransform.GetRotation().y + deltaTime * m_timeScale, vec3(0, 1, 0));
-
 }
 
 void ComputerGraphicsApp::draw() {
@@ -139,29 +153,19 @@ void ComputerGraphicsApp::draw() {
 	}
 
 	Gizmos::draw(m_projectionMatrix * m_viewMatrix);
-
-	// Bind shader
-	m_shader.bind();
-
-	// Bind transform
-	auto pvm = m_projectionMatrix * m_viewMatrix * m_quadTransform.matrix;
-	m_shader.bindUniform("ProjectionViewModel", pvm);
-
-	// Draw quad
-	m_quadMesh.Draw();
 }
 
-void ComputerGraphicsApp::AddToFreeQueue(Actor* body)
+void ComputerGraphicsApp::AddToFreeQueue(Node* body)
 {
 	m_freeQueue.emplace_back(body);
 }
 
-void ComputerGraphicsApp::RegisterBody(Actor* body)
+void ComputerGraphicsApp::RegisterBody(Node* body)
 {
 	m_actors.emplace_back(body);
 }
 
-void ComputerGraphicsApp::RemoveBody(Actor* body)
+void ComputerGraphicsApp::RemoveBody(Node* body)
 {
 	m_actors.erase(std::ranges::find(m_actors, body));
 }

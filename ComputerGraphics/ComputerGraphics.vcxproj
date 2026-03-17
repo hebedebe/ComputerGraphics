@@ -174,19 +174,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="CameraNode.cpp" />
+    <ClCompile Include="MeshNode.cpp" />
+    <ClCompile Include="MotionNode.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="ComputerGraphicsApp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="OBJMesh.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actor.h" />
+    <ClInclude Include="CameraNode.h" />
+    <ClInclude Include="MeshNode.h" />
+    <ClInclude Include="MotionNode.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="ComputerGraphicsApp.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="OBJMesh.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

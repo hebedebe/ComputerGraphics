@@ -8,5 +8,5 @@ out vec4 FragColour;
 
 void main() {
 
-	FragColour = position;
+	FragColour = sin(position);
 }

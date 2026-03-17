@@ -3,13 +3,14 @@
 #include <vector>
 
 #include "Application.h"
-#include <glm/mat4x4.hpp>
-
-#include "Mesh.h"
+#include "OBJMesh.h"
 #include "Shader.h"
 #include "Transform.h"
+#include "Node.h"
 
-class Actor;
+#include <glm/ext.hpp>
+
+//class Actor;
 
 class ComputerGraphicsApp : public aie::Application {
 public:
@@ -22,9 +23,12 @@ public:
 	void update(float deltaTime) override;
 	void draw() override;
 
-	void AddToFreeQueue(Actor* body);
-	void RegisterBody(Actor* body);
-	void RemoveBody(Actor* body);
+	void AddToFreeQueue(Node* body);
+	void RegisterBody(Node* body);
+	void RemoveBody(Node* body);
+
+	glm::mat4 GetViewMatrix() const { return m_viewMatrix; }
+	glm::mat4 GetProjectionMatrix() const { return m_projectionMatrix; }
 
 private:
 	ComputerGraphicsApp();
@@ -41,12 +45,8 @@ protected:
 
 	float m_timeScale = 1.f;
 
-	Mesh m_quadMesh;
-	Transform m_quadTransform;
-	aie::ShaderProgram m_shader;
-
-	std::vector<Actor*> m_actors;
-	std::vector<Actor*> m_freeQueue;
+	std::vector<Node*> m_actors;
+	std::vector<Node*> m_freeQueue;
 
 	bool m_vsync = true;
 };

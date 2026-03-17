@@ -1,5 +1,7 @@
 #include "Transform.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 Transform::Transform()
 	:matrix(glm::mat4(1))
 {
@@ -66,9 +68,26 @@ glm::vec3 Transform::GetScale() const
 	};
 }
 
+void Transform::Move(const glm::vec3 position)
+{
+	SetPosition(GetPosition() + position);
+}
+
+void Transform::Rotate(const glm::vec3 rotation)
+{
+	matrix = glm::rotate(matrix, rotation.x, glm::vec3(1, 0, 0));
+	matrix = glm::rotate(matrix, rotation.y, glm::vec3(0, 1, 0));
+	matrix = glm::rotate(matrix, rotation.z, glm::vec3(0,0,1));
+}
+
+void Transform::AddScale(const glm::vec3 scale)
+{
+	SetScale(GetScale() + scale);
+}
+
 Transform Transform::Identity()
 {
-	return Transform();
+	return {};
 }
 
 Transform Transform::operator*(const Transform& other) const
