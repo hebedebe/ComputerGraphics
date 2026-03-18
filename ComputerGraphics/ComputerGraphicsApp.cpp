@@ -43,37 +43,17 @@ bool ComputerGraphicsApp::startup() {
 	bunnyMesh->LoadShader(aie::eShaderStage::FRAGMENT, "./shaders/simple.frag");
 	bunnyMesh->LinkShader();
 	bunnyMesh->LoadMesh("./models/bunny.obj");
-	bunnyMesh->transform.SetScale(vec3(0.5));
+	// bunnyMesh->transform.SetScale(vec3(0.5));
 	auto bunnyMotion = new MotionNode(Transform(), Transform(vec3(0), vec3(0,1,0), vec3(0)));
 	bunnyMesh->AddChild(bunnyMotion);
 
-	auto dragonMesh = new MeshNode(Transform(vec3(0,0,-5)));
-	bunnyMesh->AddChild(dragonMesh);
-	dragonMesh->LoadShader(aie::eShaderStage::VERTEX, "./shaders/simple.vert");
-	dragonMesh->LoadShader(aie::eShaderStage::FRAGMENT, "./shaders/simple.frag");
-	dragonMesh->LinkShader();
-	dragonMesh->LoadMesh("./models/dragon.obj");
-	dragonMesh->transform.SetScale(vec3(0.5));
-	auto dragonMotion = new MotionNode(Transform(), Transform(vec3(0), vec3(0, 1, 0), vec3(0)));
-	dragonMesh->AddChild(dragonMotion);
-
-	auto buddhaMesh = new MeshNode(Transform(vec3(0, 0, 5)));
-	bunnyMesh->AddChild(buddhaMesh);
-	buddhaMesh->LoadShader(aie::eShaderStage::VERTEX, "./shaders/simple.vert");
-	buddhaMesh->LoadShader(aie::eShaderStage::FRAGMENT, "./shaders/simple.frag");
-	buddhaMesh->LinkShader();
-	buddhaMesh->LoadMesh("./models/buddha.obj");
-	buddhaMesh->transform.SetScale(vec3(0.5));
-	auto buddhaMotion = new MotionNode(Transform(), Transform(vec3(0), vec3(0, 1, 0), vec3(0)));
-	buddhaMesh->AddChild(buddhaMotion);
+	std::cout << bunnyMesh->transform.ToString().c_str() << "\n";
 
 	auto camera = new CameraNode(Transform(vec3(0, 5, 10), vec3(-0.5f, 0, 0)));
 	camera->SetActive(true);
 
-	m_viewMatrix = glm::lookAt(vec3(10 * 5.f), vec3(0), vec3(0, 1, 0));
-	m_projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 1000.0f);
-
-	camera->transform.matrix = glm::lookAt(vec3(10, 5, 10), vec3(0), vec3(0, 1, 0));
+	camera->transform.SetPosition(vec3(0,-10,-10));
+	camera->transform.SetRotationDegrees(vec3(45, 0, 0));
 
 	std::cout << "Startup completed in " << getTime() - startTime << " seconds\n";
 	return true;

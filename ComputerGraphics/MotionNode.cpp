@@ -14,7 +14,7 @@ void MotionNode::Tick(const float delta)
 	if (parent)
 	{
 		parent->transform.Move(motionTransform.GetPosition() * delta);
-		parent->transform.Rotate(motionTransform.GetRotation() * delta);
+		parent->transform.RotateDegrees(motionTransform.GetRotationRadians() * delta);
 		parent->transform.AddScale(motionTransform.GetScale() * delta);
 	}
 }

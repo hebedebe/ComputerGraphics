@@ -69,12 +69,7 @@ Transform Node::GlobalTransform() const
 {
 	if (not parent) return transform;
 	const Transform parentTransform = parent->GlobalTransform();
-	Transform tempTransform = glm::mat4(1);
-	tempTransform.matrix = glm::translate(tempTransform.matrix, transform.GetPosition());
-	tempTransform.matrix = glm::rotate(tempTransform.matrix, transform.GetRotation().x, glm::vec3(1, 0, 0));
-	tempTransform.matrix = glm::rotate(tempTransform.matrix, transform.GetRotation().y, glm::vec3(0, 1, 0));
-	tempTransform.matrix = glm::rotate(tempTransform.matrix, transform.GetRotation().z, glm::vec3(0,0,1));
-	return parentTransform * tempTransform;
+	return parentTransform * transform;
 }
 
 void Node::OnDestroy()

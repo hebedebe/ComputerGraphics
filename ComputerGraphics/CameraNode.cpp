@@ -16,8 +16,8 @@ void CameraNode::Tick(const float delta)
 
 	if (m_active)
 	{
-		constexpr float moveSpeed = 10.f;
-		constexpr float rotationSpeed = 10.f;
+		constexpr float moveSpeed = 3.f;
+		constexpr float rotationSpeed = 20.f;
 
 		glm::vec3 position(0, 0, 0);
 		glm::vec3 rotation(0, 0, 0);
@@ -25,9 +25,15 @@ void CameraNode::Tick(const float delta)
 		ImGui::Begin("Camera controls");
 		ImGui::SliderFloat3("Position", value_ptr(position), -moveSpeed, moveSpeed);
 		ImGui::SliderFloat3("Rotation", value_ptr(rotation), -rotationSpeed, rotationSpeed);
+
+		ImGui::SliderFloat("Fov", &fov, 1, 179);
+		ImGui::SliderFloat("Width", &width, 1, 100);
+		ImGui::SliderFloat("Height", &height, 1, 100);
+
+		ImGui::TextWrapped(transform.ToString().c_str());
 		ImGui::End();
 
-		transform.Rotate(rotation * delta);
+		transform.RotateDegrees(rotation * delta);
 		transform.Move(position * delta);
 	}
 }
@@ -45,7 +51,7 @@ void CameraNode::PreDraw()
 
 glm::mat4 CameraNode::GetViewMatrix() const
 {
-	return GlobalTransform().matrix;
+	return GlobalTransform().GetMatrix();
 }
 
 glm::mat4 CameraNode::GetProjectionMatrix() const

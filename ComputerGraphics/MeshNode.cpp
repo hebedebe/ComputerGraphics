@@ -45,6 +45,6 @@ void MeshNode::LinkShader()
 void MeshNode::DefaultShaderBindFunction(aie::ShaderProgram& program, MeshNode* meshNode)
 {
 	const auto* app = ComputerGraphicsApp::Get();
-	const auto pvm = app->GetProjectionMatrix() * app->GetViewMatrix() * meshNode->GlobalTransform().matrix;
+	const auto pvm = app->GetProjectionMatrix() * app->GetViewMatrix() * meshNode->GlobalTransform().GetMatrix();
 	program.bindUniform("ProjectionViewModel", pvm);
 }

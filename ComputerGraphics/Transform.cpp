@@ -1,96 +1,148 @@
 #include "Transform.h"
 
+#include <format>
 #include <glm/gtc/matrix_transform.hpp>
 
 Transform::Transform()
-	:matrix(glm::mat4(1))
+	:m_matrix(glm::mat4(1))
 {
+	Decompose();
 }
 
 Transform::Transform(const glm::mat4& transformMatrix)
-	:matrix(transformMatrix)
+	:m_matrix(transformMatrix)
 {
+	Decompose();
 }
 
 Transform::Transform(const glm::vec3 position, const glm::vec3 rotation, const glm::vec3 scale)
-	:matrix(glm::mat4(1))
+	:m_matrix(glm::mat4(1)), m_position(position), m_rotation(rotation), m_scale(scale)
 {
-	SetPosition(position);
-	SetRotation(rotation);
-	SetScale(scale);
+	Recompose();
+}
+
+void Transform::Recompose()
+{
+	m_matrix = glm::mat4(1.f);
+
+	m_matrix = glm::scale(m_matrix, m_scale);
+
+
+	m_matrix = glm::rotate(m_matrix, m_rotation.x, glm::vec3(1, 0, 0));
+	m_matrix = glm::rotate(m_matrix, m_rotation.y, glm::vec3(0, 1, 0));
+	m_matrix = glm::rotate(m_matrix, m_rotation.z, glm::vec3(0, 0, 1));
+
+
+	m_matrix = glm::translate(m_matrix, m_position);
+}
+
+void Transform::Decompose()
+{
+	m_position = glm::vec3(m_matrix[3]);
+
+	m_scale.x = glm::length(glm::vec3(m_matrix[0]));
+	m_scale.y = glm::length(glm::vec3(m_matrix[1]));
+	m_scale.z = glm::length(glm::vec3(m_matrix[2]));
+
+	glm::mat3 rot(
+		glm::vec3(m_matrix[0]) / m_scale.x,
+		glm::vec3(m_matrix[1]) / m_scale.y,
+		glm::vec3(m_matrix[2]) / m_scale.z
+	);
+
+	m_rotation.x = atan2(rot[1][2], rot[2][2]);
+	m_rotation.y = atan2(-rot[0][2], glm::sqrt(rot[1][2] * rot[1][2] + rot[2][2] * rot[2][2]));
+	m_rotation.z = atan2(rot[0][1], rot[0][0]);
+
+	Recompose();
 }
 
 void Transform::SetPosition(const glm::vec3 position)
 {
-	matrix[3][0] = position.x;
-	matrix[3][1] = position.y;
-	matrix[3][2] = position.z;
+	m_position = position; 
+	Recompose();
 }
 
-void Transform::SetRotation(const glm::vec3 rotation)
+void Transform::SetRotationRadians(const glm::vec3 rotation)
 {
-	matrix[0][3] = rotation.x;
-	matrix[1][3] = rotation.y;
-	matrix[2][3] = rotation.z;
+	m_rotation = rotation;
+	Recompose();
+}
+
+void Transform::SetRotationDegrees(const glm::vec3 rotation)
+{
+	SetRotationRadians(glm::radians(rotation));
+}
+
+glm::vec3 Transform::GetRotationDegrees() const
+{
+	return glm::degrees(m_rotation);
 }
 
 void Transform::SetScale(const glm::vec3 scale)
 {
-	matrix[0][0] = scale.x;
-	matrix[1][1] = scale.y;
-	matrix[2][2] = scale.z;
+	m_scale = scale;    
+	Recompose();
 }
 
 glm::vec3 Transform::GetPosition() const
 {
-	return {
-		matrix[3][0],
-		matrix[3][1],
-		matrix[3][2]
-	};
+	return m_position;
 }
 
-glm::vec3 Transform::GetRotation() const
+glm::vec3 Transform::GetRotationRadians() const
 {
-	return {
-		matrix[0][3],
-		matrix[1][3],
-		matrix[2][3]
-	};
+	return m_rotation;
 }
 
-glm::vec3 Transform::GetScale() const
+glm::vec3 Transform::GetScale()    const
 {
-	return {
-		matrix[0][0],
-		matrix[1][1],
-		matrix[2][2]
-	};
+	return m_scale;
 }
 
 void Transform::Move(const glm::vec3 position)
 {
-	SetPosition(GetPosition() + position);
+	SetPosition(m_position + position);
 }
 
-void Transform::Rotate(const glm::vec3 rotation)
+void Transform::RotateDegrees(const glm::vec3 rotation)
 {
-	matrix = glm::rotate(matrix, rotation.x, glm::vec3(1, 0, 0));
-	matrix = glm::rotate(matrix, rotation.y, glm::vec3(0, 1, 0));
-	matrix = glm::rotate(matrix, rotation.z, glm::vec3(0,0,1));
+	SetRotationRadians(m_rotation + glm::radians(rotation));
+}
+
+void Transform::RotateRadians(const glm::vec3 rotation)
+{
+	SetRotationRadians(m_rotation + rotation);
 }
 
 void Transform::AddScale(const glm::vec3 scale)
 {
-	SetScale(GetScale() + scale);
+	SetScale(m_scale + scale);
 }
 
-Transform Transform::Identity()
+void Transform::SetMatrix(const glm::mat4& matrix)
 {
-	return {};
+	m_matrix = matrix;
+	Decompose();
+}
+
+glm::mat4 Transform::GetMatrix() const
+{
+	return m_matrix;
 }
 
 Transform Transform::operator*(const Transform& other) const
 {
-	return { matrix * other.matrix };
+	const Transform result(m_matrix * other.m_matrix);
+	return result;
+}
+
+std::string Transform::ToString()
+{
+	glm::vec3 rotationDegrees = glm::degrees(m_rotation);
+
+	return std::format("Position: [{}, {}, {}], Rotation: [{}, {}, {}], Scale: [{}, {}, {}]",
+		m_position.x, m_position.y, m_position.z, 
+		rotationDegrees.x, rotationDegrees.y, rotationDegrees.z,
+		m_scale.x, m_scale.y, m_scale.z);
 }

@@ -1,5 +1,8 @@
 #pragma once
+#include <string>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "Constants.h"
 
 class Transform
@@ -10,24 +13,37 @@ public:
 	Transform(const glm::vec3 position, const glm::vec3 rotation = _VEC3_ZERO, const glm::vec3 scale = _VEC3_ONE);
 
 public:
+	void Recompose();
+	void Decompose();
+
 	void SetPosition(glm::vec3 position);
-	void SetRotation(glm::vec3 rotation);
+	void SetRotationRadians(glm::vec3 rotation);
+	void SetRotationDegrees(glm::vec3 rotation);
 	void SetScale(glm::vec3 scale);
 
 	[[nodiscard]] glm::vec3 GetPosition() const;
-	[[nodiscard]] glm::vec3 GetRotation() const;
+	[[nodiscard]] glm::vec3 GetRotationRadians() const;
+	[[nodiscard]] glm::vec3 GetRotationDegrees() const;
 	[[nodiscard]] glm::vec3 GetScale() const;
 
-	void Move(glm::vec3 position);
-	void Rotate(glm::vec3 rotation);
-	void AddScale(glm::vec3 scale);
+	void Move(const glm::vec3 position);
+	void RotateDegrees(const glm::vec3 rotation);
+	void RotateRadians(const glm::vec3 rotation);
+	void AddScale(const glm::vec3 scale);
 
-	static Transform Identity();
+	void SetMatrix(const glm::mat4& matrix);
+	glm::mat4 GetMatrix() const;
 
 public:
 	Transform operator* (const Transform& other) const;
 
-public:
-	glm::mat4 matrix;
+	std::string ToString();
+
+private:
+	glm::mat4 m_matrix;
+
+	glm::vec3 m_position;
+	glm::vec3 m_rotation; // In radians
+	glm::vec3 m_scale;
 };
 
