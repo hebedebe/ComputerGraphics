@@ -5,6 +5,13 @@ class CameraNode :
     public Node
 {
 public:
+	enum class ProjectionMode : uint8_t
+	{
+		PERSPECTIVE,
+		ORTHOGRAPHIC
+	};
+
+public:
 	explicit CameraNode(const Transform& transform, Node* parent = nullptr, std::string name = "Camera");
 
 public:
@@ -28,6 +35,8 @@ protected:
 	void OnDestroy() override;
 
 private:
-    bool m_active = false;
+    ProjectionMode m_projectionMode = ProjectionMode::PERSPECTIVE; //Default because orthographic sucks
+	bool m_active = false;
 };
+	
 

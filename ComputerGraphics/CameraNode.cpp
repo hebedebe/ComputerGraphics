@@ -56,7 +56,20 @@ glm::mat4 CameraNode::GetViewMatrix() const
 
 glm::mat4 CameraNode::GetProjectionMatrix() const
 {
-	return glm::perspectiveFov(glm::radians(fov), width, height, nearClip, farClip);
+	switch (m_projectionMode)
+	{
+		case ProjectionMode::ORTHOGRAPHIC:
+			{
+				const float halfWidth = width / 2.f;
+				const float halfHeight = height / 2.f;
+				return glm::ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, nearClip, farClip);
+			}
+			
+		case ProjectionMode::PERSPECTIVE:
+			return glm::perspectiveFov(glm::radians(fov), width, height, nearClip, farClip);
+	}
+
+	throw std::exception("Camera has invalid projection mode.");
 }
 
 void CameraNode::SetActive(const bool active)
