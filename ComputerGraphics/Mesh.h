@@ -7,14 +7,14 @@
 class Mesh
 {
 public:
-	Mesh() : triCount(0), vao(0), vbo(0), ibo(0) {}
+	Mesh() : m_triCount(0), m_vao(0), m_vbo(0), m_ibo(0) {}
 	virtual ~Mesh();
 
 	struct Vertex
 	{
 		glm::vec4 position;
 		glm::vec4 normal;
-		glm::vec4 texCoord;
+		glm::vec4 texcoord;
 	};
 
 	void Initialise(const unsigned long vertexCount, const Vertex* vertices, const unsigned int indexCount = 0, const unsigned int* indices = nullptr);
@@ -27,8 +27,16 @@ public:
 
 	virtual void Draw();
 
+public:
+	static Mesh* MakeQuad();
+	static Mesh* MakeCube();
+	static Mesh* MakePyramid();
+	static Mesh* MakeCylinder(float radius = 0.5f, float height = 1.f, unsigned int segments = 12);
+	static Mesh* MakeCone(float radius = 0.5f, float height = 1.f, unsigned int segments = 12);
+	static Mesh* Make(const unsigned long vertexCount, const Vertex* vertices, const unsigned int indexCount = 0, const unsigned int* indices = nullptr);
+
 protected:
-	unsigned int triCount;
-	unsigned int vao, vbo, ibo;
+	unsigned int m_triCount;
+	unsigned int m_vao, m_vbo, m_ibo;
 };
 

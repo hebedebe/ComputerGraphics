@@ -43,9 +43,6 @@ bool ComputerGraphicsApp::startup() {
 	bunnyMesh->LoadShader(aie::eShaderStage::FRAGMENT, "./shaders/simple.frag");
 	bunnyMesh->LinkShader();
 	bunnyMesh->LoadMesh("./models/bunny.obj");
-	// bunnyMesh->transform.SetScale(vec3(0.5));
-	auto bunnyMotion = new MotionNode(Transform(), Transform(vec3(0), vec3(0,1,0), vec3(0)));
-	bunnyMesh->AddChild(bunnyMotion);
 
 	std::cout << bunnyMesh->transform.ToString().c_str() << "\n";
 

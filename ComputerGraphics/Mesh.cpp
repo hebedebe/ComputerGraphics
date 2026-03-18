@@ -7,24 +7,24 @@
 
 Mesh::~Mesh()
 {
-	glDeleteVertexArrays(1, &vao);
-	glDeleteBuffers(1, &vbo);
-	glDeleteBuffers(1, &ibo);
+	glDeleteVertexArrays(1, &m_vao);
+	glDeleteBuffers(1, &m_vbo);
+	glDeleteBuffers(1, &m_ibo);
 }
 
 void Mesh::Initialise(const unsigned long vertexCount, const Vertex* vertices, const unsigned int indexCount, const unsigned int* indices)
 {
-	assert(vao == 0);
+	assert(m_vao == 0);
 
 	// Generate buffers
-	glGenBuffers(1, &vbo);
-	glGenVertexArrays(1, &vao);
+	glGenBuffers(1, &m_vbo);
+	glGenVertexArrays(1, &m_vao);
 
 	// Bind vertex array aka a mesh wrapper
-	glBindVertexArray(vao);
+	glBindVertexArray(m_vao);
 
 	// Bind vertex buffer
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 
 	// Fill vertex buffer
 	glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)sizeof(Vertex) * vertexCount, vertices, GL_STATIC_DRAW);
@@ -36,18 +36,18 @@ void Mesh::Initialise(const unsigned long vertexCount, const Vertex* vertices, c
 	// Bind indices if there are any
 	if (indexCount != 0)
 	{
-		glGenBuffers(1, &ibo);
+		glGenBuffers(1, &m_ibo);
 
 		// Bind vertex buffer
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
 
 		// Fill vertex buffer
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr)sizeof(unsigned int) * indexCount, indices, GL_STATIC_DRAW);
 
-		triCount = indexCount / 3;
+		m_triCount = indexCount / 3;
 	} else
 	{
-		triCount = vertexCount / 3;
+		m_triCount = vertexCount / 3;
 	}
 
 	// Unbind buffers
@@ -59,20 +59,22 @@ void Mesh::Initialise(const unsigned long vertexCount, const Vertex* vertices, c
 void Mesh::InitialiseQuad()
 {
 	// Check that the mesh is not initialised already
-	assert(vao == 0);
+	assert(m_vao == 0);
 
 	// Generate Buffers
-	glGenBuffers(1, &vbo);
-	glGenVertexArrays(1, &vao);
+	glGenBuffers(1, &m_vbo);
+	glGenVertexArrays(1, &m_vao);
 
 	// Bind vertex array aka a mesh wrapper
-	glBindVertexArray(vao);
+	glBindVertexArray(m_vao);
 
 	// Bind vertex buffer
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 
 	// Define 6 vertices for 2 triangles
 	Vertex vertices[6];
+	
+	// Positions
 	vertices[0].position = { -0.5f, 0, 0.5f, 1 };
 	vertices[1].position = { 0.5f, 0, 0.5f, 1 };
 	vertices[2].position = { -0.5f, 0, -0.5f, 1 };
@@ -81,6 +83,15 @@ void Mesh::InitialiseQuad()
 	vertices[4].position = { 0.5f, 0, 0.5f, 1 };
 	vertices[5].position = { 0.5f, 0, -0.5f, 1 };
 
+	// Normals
+	vertices[0].normal = { 0, 1, 0, 0 };
+	vertices[1].normal = { 0, 1, 0, 0 };
+	vertices[2].normal = { 0, 1, 0, 0 };
+
+	vertices[3].normal = { 0, 1, 0, 0 };
+	vertices[4].normal = { 0, 1, 0, 0 };
+	vertices[5].normal = { 0, 1, 0, 0 };
+
 	// Fill vertex buffer
 	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(Vertex), vertices, GL_STATIC_DRAW);
 
@@ -88,18 +99,23 @@ void Mesh::InitialiseQuad()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
 
+	// Enable second element as normal
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)16);
+
+
 	// Unbind buffers
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	// Quad has 2 triangles
-	triCount = 2;
+	m_triCount = 2;
 }
 
 void Mesh::InitialiseCube()
 {
 	// Check that the mesh is not initialised already
-	assert(vao == 0);
+	assert(m_vao == 0);
 
 	// Define 8 vertices for 12 triangles
 	Vertex vertices[8];
@@ -143,7 +159,7 @@ void Mesh::InitialiseCube()
 void Mesh::InitialisePyramid()
 {
 	// Check that the mesh is not initialised already
-	assert(vao == 0);
+	assert(m_vao == 0);
 
 	// Define 5 vertices for 10 triangles
 	Vertex vertices[5];
@@ -177,7 +193,7 @@ void Mesh::InitialisePyramid()
 void Mesh::InitialiseCylinder(const float radius, const float height, const unsigned int segments)
 {
 	// Check that the mesh is not initialised already
-	assert(vao == 0);
+	assert(m_vao == 0);
 	assert(segments <= INT_MAX);
 
 	if (segments < 2)
@@ -259,7 +275,7 @@ void Mesh::InitialiseCylinder(const float radius, const float height, const unsi
 void Mesh::InitialiseCone(const float radius, float height, const unsigned int segments)
 {
 	// Check that the mesh is not initialised already
-	assert(vao == 0);
+	assert(m_vao == 0);
 	assert(segments <= INT_MAX);
 
 	if (segments < 2)
@@ -324,10 +340,53 @@ void Mesh::InitialiseCone(const float radius, float height, const unsigned int s
 
 void Mesh::Draw()
 {
-	glBindVertexArray(vao);
+	glBindVertexArray(m_vao);
 	// using indices or just vertices?
-	if (ibo != 0)
-		glDrawElements(GL_TRIANGLES, (GLsizei)triCount * 3, GL_UNSIGNED_INT, nullptr);
+	if (m_ibo != 0)
+		glDrawElements(GL_TRIANGLES, (GLsizei)m_triCount * 3, GL_UNSIGNED_INT, nullptr);
 	else
-		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)triCount * 3);
+		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)m_triCount * 3);
+}
+
+Mesh* Mesh::MakeQuad()
+{
+	const auto mesh = new Mesh();
+	mesh->InitialiseQuad();
+	return mesh;
+}
+
+Mesh* Mesh::MakeCube()
+{
+	const auto mesh = new Mesh();
+	mesh->InitialiseCube();
+	return mesh;
+}
+
+Mesh* Mesh::MakePyramid()
+{
+	const auto mesh = new Mesh();
+	mesh->InitialisePyramid();
+	return mesh;
+}
+
+Mesh* Mesh::MakeCylinder(const float radius, const float height, const unsigned int segments)
+{
+	const auto mesh = new Mesh();
+	mesh->InitialiseCylinder(radius, height, segments);
+	return mesh;
+}
+
+Mesh* Mesh::MakeCone(const float radius, const float height, const unsigned int segments)
+{
+	const auto mesh = new Mesh();
+	mesh->InitialiseCone(radius, height, segments);
+	return mesh;
+}
+
+Mesh* Mesh::Make(const unsigned long vertexCount, const Vertex* vertices, const unsigned int indexCount,
+	const unsigned int* indices)
+{
+	const auto mesh = new Mesh();
+	mesh->Initialise(vertexCount, vertices, indexCount, indices);
+	return mesh;
 }

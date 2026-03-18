@@ -42,9 +42,21 @@ void MeshNode::LinkShader()
 	}
 }
 
-void MeshNode::DefaultShaderBindFunction(aie::ShaderProgram& program, MeshNode* meshNode)
+void MeshNode::DefaultShaderBindFunction(aie::ShaderProgram& program, const MeshNode* meshNode)
 {
 	const auto* app = ComputerGraphicsApp::Get();
-	const auto pvm = app->GetProjectionMatrix() * app->GetViewMatrix() * meshNode->GlobalTransform().GetMatrix();
+
+	const Transform globalTransform = meshNode->GlobalTransform();
+	const glm::mat4 globalTransformMatrix = globalTransform.GetMatrix();
+
+	// Bind light direction
+	program.bindUniform("LightDirection", glm::vec3(0,-1,0));
+	
+	// Bind transform
+	const auto pvm = app->GetProjectionMatrix() * app->GetViewMatrix() * globalTransformMatrix;
 	program.bindUniform("ProjectionViewModel", pvm);
+
+	// Bind normal
+	program.bindUniform("NormalMatrix",
+	glm::inverseTranspose(glm::mat3(globalTransformMatrix)));
 }

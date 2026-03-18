@@ -35,7 +35,7 @@ public:
     void SetBindFunction(const shader_bind_function& func) { m_shaderBindFunction = func; }
 
 protected:
-    static void DefaultShaderBindFunction(aie::ShaderProgram& program, MeshNode* meshNode);
+    static void DefaultShaderBindFunction(aie::ShaderProgram& program, const MeshNode* meshNode);
 
 protected:
     aie::OBJMesh m_mesh;
