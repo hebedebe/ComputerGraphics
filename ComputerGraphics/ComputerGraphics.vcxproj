@@ -42,7 +42,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v145</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -175,6 +175,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CameraNode.cpp" />
+    <ClCompile Include="LightNode.cpp" />
     <ClCompile Include="MeshNode.cpp" />
     <ClCompile Include="MotionNode.cpp" />
     <ClCompile Include="Node.cpp" />
@@ -187,6 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraNode.h" />
+    <ClInclude Include="LightNode.h" />
     <ClInclude Include="MeshNode.h" />
     <ClInclude Include="MotionNode.h" />
     <ClInclude Include="Node.h" />

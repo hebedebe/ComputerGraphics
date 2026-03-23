@@ -12,6 +12,8 @@
 
 //class Actor;
 
+class CameraNode;
+
 class ComputerGraphicsApp : public aie::Application {
 public:
 	static ComputerGraphicsApp* Get();
@@ -35,17 +37,22 @@ public:
 	void SetViewMatrix(const glm::mat4& view) { m_viewMatrix = view; }
 	void SetProjectionMatrix(const glm::mat4& projection) { m_projectionMatrix = projection; }
 
+	void SetActiveCamera(CameraNode* camera) { m_activeCamera = camera; };
+	CameraNode* GetActiveCamera() const { return m_activeCamera; };
+
 private:
 	ComputerGraphicsApp();
+
+public:
+	glm::vec4 backgroundColour = glm::vec4(0.25f, 0.25f, 0.25f, 1.f);
+
+	aie::Texture tex;
 
 protected:
 
 	// camera transforms
 	glm::mat4	m_viewMatrix;
 	glm::mat4	m_projectionMatrix;
-
-	glm::vec4 m_backgroundColour = glm::vec4(0, 0, 0, 1.f);
-
 
 	float m_timeScale = 1.f;
 
@@ -54,4 +61,6 @@ protected:
 	std::vector<Node*> m_freeQueue;
 
 	bool m_vsync = true;
+
+	CameraNode* m_activeCamera;
 };

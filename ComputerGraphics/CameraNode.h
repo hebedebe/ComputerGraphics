@@ -19,7 +19,7 @@ public:
 
 	void PreDraw() override;
 
-    [[nodiscard]] glm::mat4 GetViewMatrix() const;
+    [[nodiscard]] glm::mat4 GetViewMatrix();
 	[[nodiscard]] glm::mat4 GetProjectionMatrix() const;
 
     void SetActive(bool active);

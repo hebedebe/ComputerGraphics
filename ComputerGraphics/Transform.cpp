@@ -60,13 +60,13 @@ void Transform::Decompose()
 void Transform::SetPosition(const glm::vec3 position)
 {
 	m_position = position; 
-	Recompose();
+	MakeDirty();
 }
 
 void Transform::SetRotationRadians(const glm::vec3 rotation)
 {
 	m_rotation = rotation;
-	Recompose();
+	MakeDirty();
 }
 
 void Transform::SetRotationDegrees(const glm::vec3 rotation)
@@ -82,7 +82,7 @@ glm::vec3 Transform::GetRotationDegrees() const
 void Transform::SetScale(const glm::vec3 scale)
 {
 	m_scale = scale;    
-	Recompose();
+	MakeDirty();
 }
 
 glm::vec3 Transform::GetPosition() const
@@ -95,7 +95,7 @@ glm::vec3 Transform::GetRotationRadians() const
 	return m_rotation;
 }
 
-glm::vec3 Transform::GetScale()    const
+glm::vec3 Transform::GetScale() const
 {
 	return m_scale;
 }
@@ -126,14 +126,19 @@ void Transform::SetMatrix(const glm::mat4& matrix)
 	Decompose();
 }
 
-glm::mat4 Transform::GetMatrix() const
+glm::mat4 Transform::GetMatrix()
 {
+	if (m_dirty)
+	{
+		Recompose();
+		Clean();
+	}
 	return m_matrix;
 }
 
-Transform Transform::operator*(const Transform& other) const
+Transform Transform::operator*(Transform& other)
 {
-	const Transform result(m_matrix * other.m_matrix);
+	const Transform result(GetMatrix() * other.GetMatrix());
 	return result;
 }
 
@@ -145,4 +150,14 @@ std::string Transform::ToString()
 		m_position.x, m_position.y, m_position.z, 
 		rotationDegrees.x, rotationDegrees.y, rotationDegrees.z,
 		m_scale.x, m_scale.y, m_scale.z);
+}
+
+void Transform::MakeDirty()
+{
+	m_dirty = true;
+}
+
+void Transform::Clean()
+{
+	m_dirty = false;
 }

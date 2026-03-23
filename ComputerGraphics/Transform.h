@@ -32,12 +32,15 @@ public:
 	void AddScale(const glm::vec3 scale);
 
 	void SetMatrix(const glm::mat4& matrix);
-	glm::mat4 GetMatrix() const;
+	glm::mat4 GetMatrix();
 
 public:
-	Transform operator* (const Transform& other) const;
+	Transform operator* (Transform& other);
 
 	std::string ToString();
+
+	void MakeDirty();
+	void Clean();
 
 private:
 	glm::mat4 m_matrix;
@@ -45,5 +48,7 @@ private:
 	glm::vec3 m_position;
 	glm::vec3 m_rotation; // In radians
 	glm::vec3 m_scale;
+
+	bool m_dirty; // Only recompose/decompose if dirty
 };
 

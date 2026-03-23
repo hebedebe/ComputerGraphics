@@ -3,10 +3,12 @@
 #include <format>
 #include <utility>
 
+#include "CameraNode.h"
 #include "ComputerGraphicsApp.h"
+#include "LightNode.h"
 
 MeshNode::MeshNode(const Transform& transform, Node* parent, std::string name)
-	:Node(transform, parent, std::move(name)), m_shaderBindFunction(&DefaultShaderBindFunction)
+	:Node(transform, parent, std::move(name)), m_shaderBindFunction(PhongBindFunction)
 {
 }
 
@@ -18,12 +20,24 @@ void MeshNode::Draw()
 
 	m_shaderBindFunction(m_shaderProgram, this);
 
-	m_mesh.draw();
+	switch (m_meshType)
+	{
+	case MeshType::OBJ:
+			m_meshObj.Draw();
+			break;
+	case MeshType::PRIMITIVE:
+			m_mesh.Draw();
+			break;
+	}
 }
 
-void MeshNode::LoadMesh(const char* filename)
+void MeshNode::LoadMesh(const char* filename, const bool loadTextures, const bool flipTextureV)
 {
-	if (!m_mesh.load(filename))
+	if (m_meshObj.load(filename, loadTextures, flipTextureV))
+	{
+		SetMesh(m_meshObj);
+	}
+	else
 	{
 		throw std::exception("Mesh loading error.");
 	}
@@ -31,7 +45,10 @@ void MeshNode::LoadMesh(const char* filename)
 
 void MeshNode::LoadShader(const aie::eShaderStage shaderStage, const char* filename)
 {
-	m_shaderProgram.loadShader(shaderStage, filename);
+	if (!m_shaderProgram.loadShader(shaderStage, filename))
+	{
+		throw std::exception(std::format("Failed to load shader at {}", filename).c_str());
+	}
 }
 
 void MeshNode::LinkShader()
@@ -42,21 +59,58 @@ void MeshNode::LinkShader()
 	}
 }
 
-void MeshNode::DefaultShaderBindFunction(aie::ShaderProgram& program, const MeshNode* meshNode)
+void MeshNode::PhongBindFunction(aie::ShaderProgram& program, MeshNode* meshNode)
 {
 	const auto* app = ComputerGraphicsApp::Get();
 
-	const Transform globalTransform = meshNode->GlobalTransform();
+	CameraNode* camera = app->GetActiveCamera();
+
+	Transform globalTransform = meshNode->GlobalTransform();
 	const glm::mat4 globalTransformMatrix = globalTransform.GetMatrix();
 
-	// Bind light direction
-	program.bindUniform("LightDirection", glm::vec3(0,-1,0));
-	
+	//LightNode light{_VEC3_ZERO};
+	glm::vec3 direction = glm::vec3(0, -1, 0);
+	glm::vec3 diffuse = glm::vec3(1);
+	glm::vec3 specular = glm::vec3(1);
+
+	// Bind light
+	program.bindUniform("Ia", glm::vec3(app->backgroundColour));
+	program.bindUniform("Id", diffuse);
+	program.bindUniform("Is", specular);
+	program.bindUniform("LightDirection", direction);
+
+	// Bind camera
+	program.bindUniform("CameraPosition", camera->GlobalTransform().GetPosition());
+
+	// Bind material
+	program.bindUniform("Ka", meshNode->material.ambientColor);
+	program.bindUniform("Kd", meshNode->material.diffuseColor);
+	program.bindUniform("Ks", meshNode->material.specularColor);
+	program.bindUniform("specularPower", meshNode->material.specularPower);
+
 	// Bind transform
 	const auto pvm = app->GetProjectionMatrix() * app->GetViewMatrix() * globalTransformMatrix;
 	program.bindUniform("ProjectionViewModel", pvm);
 
 	// Bind normal
 	program.bindUniform("NormalMatrix",
-	glm::inverseTranspose(glm::mat3(globalTransformMatrix)));
+		glm::inverseTranspose(glm::mat3(globalTransformMatrix)));
+}
+
+void MeshNode::UnlitTextureBindFunction(aie::ShaderProgram& program, MeshNode* meshNode)
+{
+	const auto* app = ComputerGraphicsApp::Get();
+
+	CameraNode* camera = app->GetActiveCamera();
+
+	Transform globalTransform = meshNode->GlobalTransform();
+	const glm::mat4 globalTransformMatrix = globalTransform.GetMatrix();
+	const auto pvm = app->GetProjectionMatrix() * app->GetViewMatrix() * globalTransformMatrix;
+
+	program.bindUniform("ProjectionViewModel", pvm);
+
+	// bind texture location
+	program.bindUniform("diffuseTexture", 0);
+
+	app->tex.bind(0);
 }

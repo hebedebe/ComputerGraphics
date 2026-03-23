@@ -20,9 +20,7 @@ using glm::vec4;
 using glm::mat4;
 using aie::Gizmos;
 
-ComputerGraphicsApp::~ComputerGraphicsApp() {
-
-}
+ComputerGraphicsApp::~ComputerGraphicsApp() = default;
 
 ComputerGraphicsApp* ComputerGraphicsApp::Get()
 {
@@ -38,13 +36,24 @@ bool ComputerGraphicsApp::startup() {
 	// initialise gizmo primitive counts
 	Gizmos::create(10000, 10000, 10000, 10000);
 
-	auto bunnyMesh = new MeshNode(Transform());
-	bunnyMesh->LoadShader(aie::eShaderStage::VERTEX, "./shaders/simple.vert");
-	bunnyMesh->LoadShader(aie::eShaderStage::FRAGMENT, "./shaders/simple.frag");
-	bunnyMesh->LinkShader();
-	bunnyMesh->LoadMesh("./models/bunny.obj");
+	if (!tex.load("./textures/numbered_grid.tga"))
+	{
+		std::cout << "Failed to load texture\n";
+		return false;
+	}
 
-	std::cout << bunnyMesh->transform.ToString().c_str() << "\n";
+	const auto testingMesh = new MeshNode(Transform());
+	testingMesh->LoadShader(aie::eShaderStage::VERTEX, "./shaders/normalMap.vert");
+	testingMesh->LoadShader(aie::eShaderStage::FRAGMENT, "./shaders/normalMap.frag");
+	testingMesh->LinkShader();
+	//testingMesh->SetBindFunction(MeshNode::UnlitTextureBindFunction);
+	/*testingMesh->GetMesh<Mesh>().InitialiseQuad();
+	testingMesh->SetMeshType(MeshNode::MeshType::PRIMITIVE);
+	testingMesh->transform.SetScale(vec3(10));*/
+	testingMesh->LoadMesh("./models/soulspear/soulspear.obj", true, true);
+	testingMesh->material.ambientColor = vec3(1);
+
+	std::cout << testingMesh->transform.ToString().c_str() << "\n";
 
 	auto camera = new CameraNode(Transform(vec3(0, 5, 10), vec3(-0.5f, 0, 0)));
 	camera->SetActive(true);
@@ -85,7 +94,7 @@ void ComputerGraphicsApp::update(float deltaTime) {
 	aie::Input* input = aie::Input::getInstance();
 
 	ImGui::Begin("Debug");
-	ImGui::ColorEdit4("Background Colour", glm::value_ptr(m_backgroundColour));
+	ImGui::ColorEdit4("Background Colour", glm::value_ptr(backgroundColour));
 	ImGui::SliderFloat("Timescale", &m_timeScale, 0.1f, 15, "%.3f", 3);
 	if (ImGui::Button("Reset timescale")) m_timeScale = 1.f;
 	ImGui::Text(std::format("Fps: {}", getFPS()).c_str());
@@ -118,7 +127,7 @@ void ComputerGraphicsApp::update(float deltaTime) {
 void ComputerGraphicsApp::draw() {
 
 	// wipe the screen to the background colour
-	setBackgroundColour(m_backgroundColour.r, m_backgroundColour.g, m_backgroundColour.b, m_backgroundColour.a);
+	setBackgroundColour(backgroundColour.r, backgroundColour.g, backgroundColour.b, backgroundColour.a);
 	clearScreen();
 
 	for (const auto node : m_preDrawNodes)

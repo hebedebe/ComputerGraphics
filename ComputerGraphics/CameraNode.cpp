@@ -30,7 +30,7 @@ void CameraNode::Tick(const float delta)
 		ImGui::SliderFloat("Width", &width, 1, 100);
 		ImGui::SliderFloat("Height", &height, 1, 100);
 
-		ImGui::TextWrapped(transform.ToString().c_str());
+		ImGui::TextWrapped("%s", transform.ToString().c_str());
 		ImGui::End();
 
 		transform.RotateDegrees(rotation * delta);
@@ -45,11 +45,12 @@ void CameraNode::PreDraw()
 	assert(m_active); // If it's not active something is wrong
 
 	const auto app = ComputerGraphicsApp::Get();
+	app->SetActiveCamera(this);
 	app->SetProjectionMatrix(GetProjectionMatrix());
 	app->SetViewMatrix(GetViewMatrix());
 }
 
-glm::mat4 CameraNode::GetViewMatrix() const
+glm::mat4 CameraNode::GetViewMatrix()
 {
 	return GlobalTransform().GetMatrix();
 }

@@ -65,10 +65,10 @@ void Node::AddChild(Node* actor)
 	children.emplace_back(actor);
 }
 
-Transform Node::GlobalTransform() const
+Transform Node::GlobalTransform()
 {
 	if (not parent) return transform;
-	const Transform parentTransform = parent->GlobalTransform();
+	Transform parentTransform = parent->GlobalTransform();
 	return parentTransform * transform;
 }
 

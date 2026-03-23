@@ -33,6 +33,14 @@ void Mesh::Initialise(const unsigned long vertexCount, const Vertex* vertices, c
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
 
+	// Enable second element as normal
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)16);
+
+	// Enable third element as texture
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)32);
+
 	// Bind indices if there are any
 	if (indexCount != 0)
 	{
@@ -92,6 +100,15 @@ void Mesh::InitialiseQuad()
 	vertices[4].normal = { 0, 1, 0, 0 };
 	vertices[5].normal = { 0, 1, 0, 0 };
 
+	// Texture coordinates
+	vertices[0].texCoord = {0, 1}; // Bottom left
+	vertices[1].texCoord = {1, 1}; // Bottom right
+	vertices[2].texCoord = {0, 0}; // Top left
+
+	vertices[3].texCoord = {0, 0}; // Top left
+	vertices[4].texCoord = {1, 1}; // Bottom right
+	vertices[5].texCoord = {1, 0}; // Top right
+
 	// Fill vertex buffer
 	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(Vertex), vertices, GL_STATIC_DRAW);
 
@@ -103,6 +120,9 @@ void Mesh::InitialiseQuad()
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)16);
 
+	// Enable third element as texture
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)32);
 
 	// Unbind buffers
 	glBindVertexArray(0);
@@ -348,45 +368,45 @@ void Mesh::Draw()
 		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)m_triCount * 3);
 }
 
-Mesh* Mesh::MakeQuad()
+Mesh Mesh::MakeQuad()
 {
-	const auto mesh = new Mesh();
-	mesh->InitialiseQuad();
+	Mesh mesh;
+	mesh.InitialiseQuad();
 	return mesh;
 }
 
-Mesh* Mesh::MakeCube()
+Mesh Mesh::MakeCube()
 {
-	const auto mesh = new Mesh();
-	mesh->InitialiseCube();
+	Mesh mesh;
+	mesh.InitialiseCube();
 	return mesh;
 }
 
-Mesh* Mesh::MakePyramid()
+Mesh Mesh::MakePyramid()
 {
-	const auto mesh = new Mesh();
-	mesh->InitialisePyramid();
+	Mesh mesh;
+	mesh.InitialisePyramid();
 	return mesh;
 }
 
-Mesh* Mesh::MakeCylinder(const float radius, const float height, const unsigned int segments)
+Mesh Mesh::MakeCylinder(const float radius, const float height, const unsigned int segments)
 {
-	const auto mesh = new Mesh();
-	mesh->InitialiseCylinder(radius, height, segments);
+	Mesh mesh;
+	mesh.InitialiseCylinder(radius, height, segments);
 	return mesh;
 }
 
-Mesh* Mesh::MakeCone(const float radius, const float height, const unsigned int segments)
+Mesh Mesh::MakeCone(const float radius, const float height, const unsigned int segments)
 {
-	const auto mesh = new Mesh();
-	mesh->InitialiseCone(radius, height, segments);
+	Mesh mesh;
+	mesh.InitialiseCone(radius, height, segments);
 	return mesh;
 }
 
-Mesh* Mesh::Make(const unsigned long vertexCount, const Vertex* vertices, const unsigned int indexCount,
+Mesh Mesh::Make(const unsigned long vertexCount, const Vertex* vertices, const unsigned int indexCount,
 	const unsigned int* indices)
 {
-	const auto mesh = new Mesh();
-	mesh->Initialise(vertexCount, vertices, indexCount, indices);
+	Mesh mesh;
+	mesh.Initialise(vertexCount, vertices, indexCount, indices);
 	return mesh;
 }

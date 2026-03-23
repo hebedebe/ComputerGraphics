@@ -22,7 +22,7 @@ public:
 	void RemoveChild(Node* actor);
 	void AddChild(Node* actor);
 
-	[[nodiscard]] Transform GlobalTransform() const;
+	[[nodiscard]] Transform GlobalTransform();
 
 	template<typename T>
 	T* As() { return dynamic_cast<T*>(this); }
