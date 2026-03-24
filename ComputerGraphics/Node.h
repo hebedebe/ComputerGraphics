@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Transform.h"
+#include "Signal.h"
 
 class Node
 {

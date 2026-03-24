@@ -5,7 +5,6 @@
 
 #include "CameraNode.h"
 #include "ComputerGraphicsApp.h"
-#include "LightNode.h"
 
 MeshNode::MeshNode(const Transform& transform, Node* parent, std::string name)
 	:Node(transform, parent, std::move(name)), m_shaderBindFunction(PhongBindFunction)
@@ -55,6 +54,7 @@ void MeshNode::LinkShader()
 {
 	if (!m_shaderProgram.link())
 	{
+		printf(std::format("Shader error: {}", m_shaderProgram.getLastError()).c_str());
 		throw std::exception(std::format("Shader error: {}", m_shaderProgram.getLastError()).c_str());
 	}
 }
@@ -74,7 +74,7 @@ void MeshNode::PhongBindFunction(aie::ShaderProgram& program, MeshNode* meshNode
 	glm::vec3 specular = glm::vec3(1);
 
 	// Bind light
-	program.bindUniform("Ia", glm::vec3(app->backgroundColour));
+	program.bindUniform("Ia", glm::vec3(app->environment.ambientLight));
 	program.bindUniform("Id", diffuse);
 	program.bindUniform("Is", specular);
 	program.bindUniform("LightDirection", direction);
@@ -112,5 +112,49 @@ void MeshNode::UnlitTextureBindFunction(aie::ShaderProgram& program, MeshNode* m
 	// bind texture location
 	program.bindUniform("diffuseTexture", 0);
 
-	app->tex.bind(0);
+	meshNode->material.texture.bind(0);
+}
+
+void MeshNode::LitTextureBindFunction(aie::ShaderProgram& program, MeshNode* meshNode)
+{
+	const auto* app = ComputerGraphicsApp::Get();
+
+	CameraNode* camera = app->GetActiveCamera();
+
+	Transform globalTransform = meshNode->GlobalTransform();
+	const glm::mat4 globalTransformMatrix = globalTransform.GetMatrix();
+
+	// Bind light
+	program.bindUniform("AmbientColour", glm::vec3(app->environment.ambientLight));
+	program.bindUniform("LightDirection", app->environment.sunLight.direction);
+	program.bindUniform("LightColour", app->environment.sunLight.diffuse);
+
+	// Bind camera
+	program.bindUniform("CameraPosition", camera->GlobalTransform().GetPosition());
+
+	// Bind material
+	program.bindUniform("Ka", meshNode->material.ambientColor);
+	program.bindUniform("Kd", meshNode->material.diffuseColor);
+	program.bindUniform("Ks", meshNode->material.specularColor);
+	program.bindUniform("specularPower", meshNode->material.specularPower);
+
+	// Bind transform
+	const auto pvm = app->GetProjectionMatrix() * app->GetViewMatrix() * globalTransformMatrix;
+	program.bindUniform("ProjectionViewModel", pvm);
+
+	// Bind normal
+	program.bindUniform("NormalMatrix",
+		glm::inverseTranspose(glm::mat3(globalTransformMatrix)));
+	
+	// Bind model
+	program.bindUniform("ModelMatrix", globalTransformMatrix);
+
+	const int numLights = app->environment.registeredLights;
+	program.bindUniform("numLights", numLights);
+	program.bindUniform("PointLightPosition", numLights, app->environment.pointLightPositions);
+	program.bindUniform("PointLightColour", numLights, app->environment.pointLightColours);
+
+	program.bindUniform("diffuseTexture", 0);
+
+	meshNode->material.texture.bind(0);
 }

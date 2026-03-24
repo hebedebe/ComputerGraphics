@@ -1,23 +1,24 @@
 #pragma once
+
 #include "Node.h"
+#include "Light.h"
+
 class LightNode :
     public Node
 {
 public:
-    struct Light
-    {
-        glm::vec3 direction;
-        glm::vec3 diffuse;
-        glm::vec3 specular;
-    };
-
-public:
-    explicit LightNode(const Transform& transform, Node* parent = nullptr, std::string name = "Light", Light light = {
-	                       .direction = glm::vec3{0}, .diffuse = glm::vec3{1}, .specular = glm::vec3{1}});
+    explicit LightNode(const Transform& transform, Node* parent = nullptr, std::string name = "Light", const Light& light = {
+	                       .diffuse = glm::vec3{1,0,0}, .specular = glm::vec3{1}, .direction = glm::vec3{0}});
 
 public:
     void UpdateLightData();
     Light GetLightData() const;
+
+    void Draw() override;
+
+protected:
+    void OnDestroy() override;
+    void RebuildLight();
 
 protected:
     Light m_lightData;

@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Constants.h"
+#include "Signal.h"
 
 class Transform
 {
@@ -41,6 +42,9 @@ public:
 
 	void MakeDirty();
 	void Clean();
+
+public:
+	Signal<> dirtied;
 
 private:
 	glm::mat4 m_matrix;

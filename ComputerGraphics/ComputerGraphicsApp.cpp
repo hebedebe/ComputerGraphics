@@ -11,6 +11,7 @@
 #include "Input.h"
 #include "Node.h"
 #include "imgui.h"
+#include "LightNode.h"
 #include "MeshNode.h"
 #include "MotionNode.h"
 #include "Transform.h"
@@ -36,22 +37,15 @@ bool ComputerGraphicsApp::startup() {
 	// initialise gizmo primitive counts
 	Gizmos::create(10000, 10000, 10000, 10000);
 
-	if (!tex.load("./textures/numbered_grid.tga"))
-	{
-		std::cout << "Failed to load texture\n";
-		return false;
-	}
-
 	const auto testingMesh = new MeshNode(Transform());
-	testingMesh->LoadShader(aie::eShaderStage::VERTEX, "./shaders/normalMap.vert");
-	testingMesh->LoadShader(aie::eShaderStage::FRAGMENT, "./shaders/normalMap.frag");
+	testingMesh->LoadShader(aie::eShaderStage::VERTEX, "./shaders/normalMapLit.vert");
+	testingMesh->LoadShader(aie::eShaderStage::FRAGMENT, "./shaders/normalMapLit.frag");
 	testingMesh->LinkShader();
-	//testingMesh->SetBindFunction(MeshNode::UnlitTextureBindFunction);
-	/*testingMesh->GetMesh<Mesh>().InitialiseQuad();
-	testingMesh->SetMeshType(MeshNode::MeshType::PRIMITIVE);
-	testingMesh->transform.SetScale(vec3(10));*/
+	testingMesh->SetBindFunction(MeshNode::LitTextureBindFunction);
 	testingMesh->LoadMesh("./models/soulspear/soulspear.obj", true, true);
-	testingMesh->material.ambientColor = vec3(1);
+
+	new LightNode(Transform({-1, 2, 0}));
+	new LightNode(Transform({1, 2, 0}), nullptr, "Light2", {{0,1,0}});
 
 	std::cout << testingMesh->transform.ToString().c_str() << "\n";
 
@@ -94,7 +88,7 @@ void ComputerGraphicsApp::update(float deltaTime) {
 	aie::Input* input = aie::Input::getInstance();
 
 	ImGui::Begin("Debug");
-	ImGui::ColorEdit4("Background Colour", glm::value_ptr(backgroundColour));
+	ImGui::ColorEdit4("Background Colour", glm::value_ptr(environment.backgroundColor));
 	ImGui::SliderFloat("Timescale", &m_timeScale, 0.1f, 15, "%.3f", 3);
 	if (ImGui::Button("Reset timescale")) m_timeScale = 1.f;
 	ImGui::Text(std::format("Fps: {}", getFPS()).c_str());
@@ -127,8 +121,19 @@ void ComputerGraphicsApp::update(float deltaTime) {
 void ComputerGraphicsApp::draw() {
 
 	// wipe the screen to the background colour
-	setBackgroundColour(backgroundColour.r, backgroundColour.g, backgroundColour.b, backgroundColour.a);
+	setBackgroundColour(
+		environment.backgroundColor.r, 
+		environment.backgroundColor.g, 
+		environment.backgroundColor.b
+	);
 	clearScreen();
+
+	if (m_lightingDirty)
+	{
+		m_lightingDirty = false;
+		environment.registeredLights = 0;
+		buildLights.Emit();
+	}
 
 	for (const auto node : m_preDrawNodes)
 	{
@@ -170,6 +175,11 @@ void ComputerGraphicsApp::RemovePreDraw(Node* node)
 	if (iter != m_preDrawNodes.end())
 		m_preDrawNodes.erase(iter);
 
+}
+
+void ComputerGraphicsApp::MarkLightingDirty()
+{
+	m_lightingDirty = true;
 }
 
 ComputerGraphicsApp::ComputerGraphicsApp()

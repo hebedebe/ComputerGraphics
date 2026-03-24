@@ -1,14 +1,14 @@
 #pragma once
 
 #include <vector>
+#include <glm/ext.hpp>
 
 #include "Application.h"
 #include "OBJMesh.h"
 #include "Shader.h"
-#include "Transform.h"
+#include "Environment.h"
 #include "Node.h"
 
-#include <glm/ext.hpp>
 
 //class Actor;
 
@@ -37,19 +37,16 @@ public:
 	void SetViewMatrix(const glm::mat4& view) { m_viewMatrix = view; }
 	void SetProjectionMatrix(const glm::mat4& projection) { m_projectionMatrix = projection; }
 
-	void SetActiveCamera(CameraNode* camera) { m_activeCamera = camera; };
-	CameraNode* GetActiveCamera() const { return m_activeCamera; };
+	void SetActiveCamera(CameraNode* camera) { m_activeCamera = camera; }
+	CameraNode* GetActiveCamera() const { return m_activeCamera; }
 
-private:
-	ComputerGraphicsApp();
+	void MarkLightingDirty();
 
 public:
-	glm::vec4 backgroundColour = glm::vec4(0.25f, 0.25f, 0.25f, 1.f);
-
-	aie::Texture tex;
+	Environment environment;
+	Signal<> buildLights;
 
 protected:
-
 	// camera transforms
 	glm::mat4	m_viewMatrix;
 	glm::mat4	m_projectionMatrix;
@@ -63,4 +60,9 @@ protected:
 	bool m_vsync = true;
 
 	CameraNode* m_activeCamera;
+
+	bool m_lightingDirty = true;
+
+private:
+	ComputerGraphicsApp();
 };

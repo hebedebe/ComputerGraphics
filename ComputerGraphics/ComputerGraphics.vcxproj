@@ -188,6 +188,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraNode.h" />
+    <ClInclude Include="Environment.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="LightNode.h" />
     <ClInclude Include="MeshNode.h" />
     <ClInclude Include="MotionNode.h" />
@@ -197,6 +199,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="OBJMesh.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Signal.h" />
     <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>

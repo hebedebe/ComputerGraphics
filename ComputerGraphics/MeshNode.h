@@ -30,6 +30,7 @@ public:
         glm::vec3 diffuseColor = _VEC3_ONE;
         glm::vec3 specularColor = _VEC3_ONE;
         float specularPower = 1.f;
+        aie::Texture texture;
     };
 
 public:
@@ -64,6 +65,7 @@ public:
 public:
     static void PhongBindFunction(aie::ShaderProgram& program, MeshNode* meshNode);
     static void UnlitTextureBindFunction(aie::ShaderProgram& program, MeshNode* meshNode);
+    static void LitTextureBindFunction(aie::ShaderProgram& program, MeshNode* meshNode);
 
 protected:
     aie::OBJMesh m_meshObj;

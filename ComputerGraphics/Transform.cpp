@@ -155,6 +155,7 @@ std::string Transform::ToString()
 void Transform::MakeDirty()
 {
 	m_dirty = true;
+	dirtied.Emit();
 }
 
 void Transform::Clean()
