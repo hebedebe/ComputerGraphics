@@ -2,6 +2,7 @@
 
 #include "Node.h"
 #include "Light.h"
+#include "Mesh.h"
 
 class LightNode :
     public Node
@@ -14,6 +15,7 @@ public:
     void UpdateLightData();
     Light GetLightData() const;
 
+    void Tick(float delta) override;
     void Draw() override;
 
 protected:
@@ -22,5 +24,7 @@ protected:
 
 protected:
     Light m_lightData;
+
+    bool m_debug = false;
 };
 

@@ -54,6 +54,7 @@ public:
     void SetShaderProgram(const aie::ShaderProgram& shaderProgram) { m_shaderProgram = shaderProgram; }
     void LoadShader(aie::eShaderStage shaderStage, const char* filename);
     void LinkShader();
+    void InitialiseStandardShader();
 
     void SetBindFunction(const shader_bind_function& func) { m_shaderBindFunction = func; }
 
@@ -63,9 +64,7 @@ public:
     Material material;
 
 public:
-    static void PhongBindFunction(aie::ShaderProgram& program, MeshNode* meshNode);
-    static void UnlitTextureBindFunction(aie::ShaderProgram& program, MeshNode* meshNode);
-    static void LitTextureBindFunction(aie::ShaderProgram& program, MeshNode* meshNode);
+    static void StandardBindFunction(aie::ShaderProgram& program, MeshNode* meshNode);
 
 protected:
     aie::OBJMesh m_meshObj;

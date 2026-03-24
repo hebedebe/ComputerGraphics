@@ -1,5 +1,7 @@
 #include "Node.h"
 
+#include <format>
+
 #include "ComputerGraphicsApp.h"
 #include <ranges>
 //#include <glm/ext.hpp>
@@ -63,6 +65,11 @@ void Node::AddChild(Node* actor)
 
 	actor->parent = this;
 	children.emplace_back(actor);
+}
+
+std::string Node::GetUniqueName()
+{
+	return std::format("{}_{}", name, reinterpret_cast<unsigned long long>(this));
 }
 
 Transform Node::GlobalTransform()

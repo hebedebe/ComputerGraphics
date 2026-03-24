@@ -38,16 +38,11 @@ bool ComputerGraphicsApp::startup() {
 	Gizmos::create(10000, 10000, 10000, 10000);
 
 	const auto testingMesh = new MeshNode(Transform());
-	testingMesh->LoadShader(aie::eShaderStage::VERTEX, "./shaders/normalMapLit.vert");
-	testingMesh->LoadShader(aie::eShaderStage::FRAGMENT, "./shaders/normalMapLit.frag");
-	testingMesh->LinkShader();
-	testingMesh->SetBindFunction(MeshNode::LitTextureBindFunction);
+	testingMesh->InitialiseStandardShader();
 	testingMesh->LoadMesh("./models/soulspear/soulspear.obj", true, true);
 
 	new LightNode(Transform({-1, 2, 0}));
 	new LightNode(Transform({1, 2, 0}), nullptr, "Light2", {{0,1,0}});
-
-	std::cout << testingMesh->transform.ToString().c_str() << "\n";
 
 	auto camera = new CameraNode(Transform(vec3(0, 5, 10), vec3(-0.5f, 0, 0)));
 	camera->SetActive(true);
@@ -88,7 +83,8 @@ void ComputerGraphicsApp::update(float deltaTime) {
 	aie::Input* input = aie::Input::getInstance();
 
 	ImGui::Begin("Debug");
-	ImGui::ColorEdit4("Background Colour", glm::value_ptr(environment.backgroundColor));
+	ImGui::ColorEdit3("Background Colour", glm::value_ptr(environment.backgroundColor));
+	ImGui::ColorEdit3("Ambient Light", glm::value_ptr(environment.ambientLight));
 	ImGui::SliderFloat("Timescale", &m_timeScale, 0.1f, 15, "%.3f", 3);
 	if (ImGui::Button("Reset timescale")) m_timeScale = 1.f;
 	ImGui::Text(std::format("Fps: {}", getFPS()).c_str());

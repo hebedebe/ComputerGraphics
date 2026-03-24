@@ -59,6 +59,7 @@ void Transform::Decompose()
 
 void Transform::SetPosition(const glm::vec3 position)
 {
+	if (position == m_position) return;
 	m_position = position; 
 	MakeDirty();
 }
@@ -102,6 +103,7 @@ glm::vec3 Transform::GetScale() const
 
 void Transform::Move(const glm::vec3 position)
 {
+	
 	SetPosition(m_position + position);
 }
 

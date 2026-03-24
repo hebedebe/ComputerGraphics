@@ -7,7 +7,7 @@
 #include "ComputerGraphicsApp.h"
 
 MeshNode::MeshNode(const Transform& transform, Node* parent, std::string name)
-	:Node(transform, parent, std::move(name)), m_shaderBindFunction(PhongBindFunction)
+	:Node(transform, parent, std::move(name)), m_shaderBindFunction(StandardBindFunction)
 {
 }
 
@@ -59,63 +59,15 @@ void MeshNode::LinkShader()
 	}
 }
 
-void MeshNode::PhongBindFunction(aie::ShaderProgram& program, MeshNode* meshNode)
+void MeshNode::InitialiseStandardShader()
 {
-	const auto* app = ComputerGraphicsApp::Get();
-
-	CameraNode* camera = app->GetActiveCamera();
-
-	Transform globalTransform = meshNode->GlobalTransform();
-	const glm::mat4 globalTransformMatrix = globalTransform.GetMatrix();
-
-	//LightNode light{_VEC3_ZERO};
-	glm::vec3 direction = glm::vec3(0, -1, 0);
-	glm::vec3 diffuse = glm::vec3(1);
-	glm::vec3 specular = glm::vec3(1);
-
-	// Bind light
-	program.bindUniform("Ia", glm::vec3(app->environment.ambientLight));
-	program.bindUniform("Id", diffuse);
-	program.bindUniform("Is", specular);
-	program.bindUniform("LightDirection", direction);
-
-	// Bind camera
-	program.bindUniform("CameraPosition", camera->GlobalTransform().GetPosition());
-
-	// Bind material
-	program.bindUniform("Ka", meshNode->material.ambientColor);
-	program.bindUniform("Kd", meshNode->material.diffuseColor);
-	program.bindUniform("Ks", meshNode->material.specularColor);
-	program.bindUniform("specularPower", meshNode->material.specularPower);
-
-	// Bind transform
-	const auto pvm = app->GetProjectionMatrix() * app->GetViewMatrix() * globalTransformMatrix;
-	program.bindUniform("ProjectionViewModel", pvm);
-
-	// Bind normal
-	program.bindUniform("NormalMatrix",
-		glm::inverseTranspose(glm::mat3(globalTransformMatrix)));
+	LoadShader(aie::eShaderStage::VERTEX, "./shaders/standard.vert");
+	LoadShader(aie::eShaderStage::FRAGMENT, "./shaders/standard.frag");
+	LinkShader();
 }
 
-void MeshNode::UnlitTextureBindFunction(aie::ShaderProgram& program, MeshNode* meshNode)
-{
-	const auto* app = ComputerGraphicsApp::Get();
 
-	CameraNode* camera = app->GetActiveCamera();
-
-	Transform globalTransform = meshNode->GlobalTransform();
-	const glm::mat4 globalTransformMatrix = globalTransform.GetMatrix();
-	const auto pvm = app->GetProjectionMatrix() * app->GetViewMatrix() * globalTransformMatrix;
-
-	program.bindUniform("ProjectionViewModel", pvm);
-
-	// bind texture location
-	program.bindUniform("diffuseTexture", 0);
-
-	meshNode->material.texture.bind(0);
-}
-
-void MeshNode::LitTextureBindFunction(aie::ShaderProgram& program, MeshNode* meshNode)
+void MeshNode::StandardBindFunction(aie::ShaderProgram& program, MeshNode* meshNode)
 {
 	const auto* app = ComputerGraphicsApp::Get();
 
@@ -143,8 +95,7 @@ void MeshNode::LitTextureBindFunction(aie::ShaderProgram& program, MeshNode* mes
 	program.bindUniform("ProjectionViewModel", pvm);
 
 	// Bind normal
-	program.bindUniform("NormalMatrix",
-		glm::inverseTranspose(glm::mat3(globalTransformMatrix)));
+	program.bindUniform("NormalMatrix", glm::inverseTranspose(glm::mat3(globalTransformMatrix)));
 	
 	// Bind model
 	program.bindUniform("ModelMatrix", globalTransformMatrix);

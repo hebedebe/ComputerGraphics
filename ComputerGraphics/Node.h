@@ -23,6 +23,8 @@ public:
 	void RemoveChild(Node* actor);
 	void AddChild(Node* actor);
 
+	std::string GetUniqueName();
+
 	[[nodiscard]] Transform GlobalTransform();
 
 	template<typename T>

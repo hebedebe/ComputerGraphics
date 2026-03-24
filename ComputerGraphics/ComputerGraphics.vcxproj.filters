@@ -27,9 +27,6 @@
     <ClCompile Include="ComputerGraphicsApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Node.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -52,14 +49,14 @@
       <Filter>Source Files\Nodes</Filter>
     </ClCompile>
     <ClCompile Include="LightNode.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Source Files\Nodes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ComputerGraphicsApp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
@@ -89,9 +86,6 @@
     <ClInclude Include="CameraNode.h">
       <Filter>Header Files\Nodes</Filter>
     </ClInclude>
-    <ClInclude Include="LightNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Environment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -101,5 +95,16 @@
     <ClInclude Include="Signal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LightNode.h">
+      <Filter>Header Files\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Header Files\Nodes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Signal.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
