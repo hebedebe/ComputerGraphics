@@ -21,9 +21,7 @@ Light LightNode::GetLightData() const
 
 void LightNode::Ready()
 {
-	printf("Light\n");
 	Node::Ready();
-	printf("m_tree: %p\n", m_tree);
 	transform.dirtied.Connect(m_tree, [this] {this->m_tree->environment.MarkLightingDirty(); });
 	m_tree->environment.buildLights.Connect(this, [this] {RebuildLight(); });
 }
@@ -70,6 +68,4 @@ void LightNode::RebuildLight()
 	environment.pointLightPositions[index] = GlobalTransform().GetPosition();
 
 	environment.registeredLights++;
-
-	printf("Built light at index %i\n", environment.registeredLights);
 }

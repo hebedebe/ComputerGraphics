@@ -27,7 +27,6 @@ Node::~Node()
 
 void Node::Ready()
 {
-	printf("Node ready\n");
 }
 
 void Node::Tick(float delta)
