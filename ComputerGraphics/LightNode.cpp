@@ -7,11 +7,7 @@
 LightNode::LightNode(const Transform& transform, Node* parent, std::string name, const Light& light)
 	:Node(transform, parent, std::move(name)), m_lightData(light)
 {
-	auto app = ComputerGraphicsApp::Get();
-	app->MarkLightingDirty();
-	app->buildLights.Connect(this, [this] {this->RebuildLight(); });
-
-	this->transform.dirtied.Connect(this, [app] {app->MarkLightingDirty(); });
+	this->transform.dirtied.Connect(this, [this] {m_tree->environment.MarkLightingDirty(); });
 }
 
 void LightNode::UpdateLightData()
@@ -37,9 +33,6 @@ void LightNode::Tick(float delta)
 	ImGui::DragFloat("Intensity", &m_lightData.intensity);
 	ImGui::Checkbox("Render gizmo", &m_debug);
 
-	//ComputerGraphicsApp::Get()->MarkLightingDirty();
-
-
 	transform.Move(position * delta);
 
 	ImGui::End();
@@ -57,19 +50,16 @@ void LightNode::OnDestroy()
 {
 	Node::OnDestroy();
 
-	const auto app = ComputerGraphicsApp::Get();
-	app->buildLights.Disconnect(this);
+	m_tree->environment.buildLights.Disconnect(this);
 }
 
 void LightNode::RebuildLight()
 {
-	const auto app = ComputerGraphicsApp::Get();
-
-	auto& environment = app->environment;
+	auto& environment = m_tree->environment;
 	const int& index = environment.registeredLights;
 
-	app->environment.pointLightColours[index] = m_lightData.diffuse * m_lightData.intensity;
-	app->environment.pointLightPositions[index] = GlobalTransform().GetPosition();
+	m_tree->environment.pointLightColours[index] = m_lightData.diffuse * m_lightData.intensity;
+	m_tree->environment.pointLightPositions[index] = GlobalTransform().GetPosition();
 
 	environment.registeredLights++;
 }

@@ -69,17 +69,18 @@ void MeshNode::InitialiseStandardShader()
 
 void MeshNode::StandardBindFunction(aie::ShaderProgram& program, MeshNode* meshNode)
 {
-	const auto* app = ComputerGraphicsApp::Get();
+	const auto app = ComputerGraphicsApp::Get();
+	const auto& tree = meshNode->GetTree();
 
-	CameraNode* camera = app->GetActiveCamera();
+	CameraNode* camera = tree->GetActiveCamera();
 
 	Transform globalTransform = meshNode->GlobalTransform();
 	const glm::mat4 globalTransformMatrix = globalTransform.GetMatrix();
 
 	// Bind light
-	program.bindUniform("AmbientColour", glm::vec3(app->environment.ambientLight));
-	program.bindUniform("LightDirection", app->environment.sunLight.direction);
-	program.bindUniform("LightColour", app->environment.sunLight.diffuse);
+	program.bindUniform("AmbientColour", glm::vec3(tree->environment.ambientLight));
+	program.bindUniform("LightDirection", tree->environment.sunLight.direction);
+	program.bindUniform("LightColour", tree->environment.sunLight.diffuse);
 
 	// Bind camera
 	program.bindUniform("CameraPosition", camera->GlobalTransform().GetPosition());
@@ -100,10 +101,10 @@ void MeshNode::StandardBindFunction(aie::ShaderProgram& program, MeshNode* meshN
 	// Bind model
 	program.bindUniform("ModelMatrix", globalTransformMatrix);
 
-	const int numLights = app->environment.registeredLights;
+	const int numLights = tree->environment.registeredLights;
 	program.bindUniform("numLights", numLights);
-	program.bindUniform("PointLightPosition", numLights, app->environment.pointLightPositions);
-	program.bindUniform("PointLightColour", numLights, app->environment.pointLightColours);
+	program.bindUniform("PointLightPosition", numLights, tree->environment.pointLightPositions);
+	program.bindUniform("PointLightColour", numLights, tree->environment.pointLightColours);
 
 	program.bindUniform("diffuseTexture", 0);
 

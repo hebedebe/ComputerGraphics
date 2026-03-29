@@ -45,7 +45,7 @@ void CameraNode::PreDraw()
 	assert(m_active); // If it's not active something is wrong
 
 	const auto app = ComputerGraphicsApp::Get();
-	app->SetActiveCamera(this);
+	m_tree->SetActiveCamera(this);
 	app->SetProjectionMatrix(GetProjectionMatrix());
 	app->SetViewMatrix(GetViewMatrix());
 }
@@ -79,11 +79,11 @@ void CameraNode::SetActive(const bool active)
 	m_active = active;
 	if (active)
 	{
-		ComputerGraphicsApp::Get()->RegisterPreDraw(this);
+		m_tree->RegisterPreDraw(this);
 	}
 	else
 	{
-		ComputerGraphicsApp::Get()->RemovePreDraw(this);
+		m_tree->RemovePreDraw(this);
 	}
 }
 
@@ -91,5 +91,5 @@ void CameraNode::OnDestroy()
 {
 	Node::OnDestroy();
 
-	if (m_active) ComputerGraphicsApp::Get()->RemovePreDraw(this);
+	if (m_active) m_tree->RemovePreDraw(this);
 }

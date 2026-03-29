@@ -14,6 +14,7 @@
 #include "LightNode.h"
 #include "MeshNode.h"
 #include "MotionNode.h"
+#include "NodeTree.h"
 #include "Transform.h"
 
 using glm::vec3;
@@ -54,8 +55,9 @@ bool ComputerGraphicsApp::startup() {
 	return true;
 }
 
-void ComputerGraphicsApp::shutdown() {
-
+void ComputerGraphicsApp::shutdown() 
+{
+	delete m_nodeTree;
 	Gizmos::destroy();
 }
 
@@ -79,106 +81,43 @@ void ComputerGraphicsApp::update(float deltaTime) {
 	// add a transform so that we can see the axis
 	Gizmos::addTransform(mat4(1));
 
+	if (m_nodeTree) m_nodeTree->Tick(deltaTime);
+
 	// quit if we press escape
 	aie::Input* input = aie::Input::getInstance();
-
-	ImGui::Begin("Debug");
-	ImGui::ColorEdit3("Background Colour", glm::value_ptr(environment.backgroundColor));
-	ImGui::ColorEdit3("Ambient Light", glm::value_ptr(environment.ambientLight));
-	ImGui::SliderFloat("Timescale", &m_timeScale, 0.1f, 15, "%.3f", 3);
-	if (ImGui::Button("Reset timescale")) m_timeScale = 1.f;
-	ImGui::Text(std::format("Fps: {}", getFPS()).c_str());
-	bool newVsync = m_vsync;
-	ImGui::Checkbox("VSync", &newVsync);
-	if (m_vsync != newVsync)
-	{
-		setVSync(newVsync);
-		m_vsync = newVsync;
-	}
-	ImGui::End();
-
-
-	for (const auto node : m_nodes)
-	{
-		node->Tick(deltaTime*m_timeScale);
-	}
-
-	for (const auto node : m_freeQueue)
-	{
-		node->Free();
-	}
-	m_freeQueue.clear();
 
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
 
 }
 
-void ComputerGraphicsApp::draw() {
-
-	// wipe the screen to the background colour
-	setBackgroundColour(
-		environment.backgroundColor.r, 
-		environment.backgroundColor.g, 
-		environment.backgroundColor.b
-	);
+void ComputerGraphicsApp::draw() 
+{
+	if (m_nodeTree)
+	{
+		setBackgroundColour
+		(
+			m_nodeTree->environment.backgroundColor.r,
+			m_nodeTree->environment.backgroundColor.g,
+			m_nodeTree->environment.backgroundColor.b
+		);
+	}
 	clearScreen();
 
-	if (m_lightingDirty)
-	{
-		m_lightingDirty = false;
-		environment.registeredLights = 0;
-		buildLights.Emit();
-	}
+	m_nodeTree->PreDraw();
 
-	for (const auto node : m_preDrawNodes)
-	{
-		node->PreDraw();
-	}
-
-	for (const auto node : m_nodes)
-	{
-		if (node->visible)
-			node->Draw();
-	}
+	m_nodeTree->Draw();
 
 	Gizmos::draw(m_projectionMatrix * m_viewMatrix);
 }
 
-void ComputerGraphicsApp::AddToFreeQueue(Node* node)
+NodeTree* ComputerGraphicsApp::GetTree() const
 {
-	m_freeQueue.emplace_back(node);
-}
-
-void ComputerGraphicsApp::RegisterNode(Node* node)
-{
-	m_nodes.emplace_back(node);
-}
-
-void ComputerGraphicsApp::RemoveNode(Node* node)
-{
-	m_nodes.erase(std::ranges::find(m_nodes, node));
-}
-
-void ComputerGraphicsApp::RegisterPreDraw(Node* node)
-{
-	m_preDrawNodes.emplace_back(node);
-}
-
-void ComputerGraphicsApp::RemovePreDraw(Node* node)
-{
-	const auto iter = std::ranges::find(m_preDrawNodes, node);
-	if (iter != m_preDrawNodes.end())
-		m_preDrawNodes.erase(iter);
-
-}
-
-void ComputerGraphicsApp::MarkLightingDirty()
-{
-	m_lightingDirty = true;
+	return m_nodeTree;
 }
 
 ComputerGraphicsApp::ComputerGraphicsApp()
+	:m_nodeTree(new NodeTree)
 {
 	std::cout << "Constructed ComputerGraphicsApp.\n";
 }

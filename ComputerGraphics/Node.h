@@ -3,8 +3,11 @@
 #include <string>
 #include <vector>
 
+#include "NodeTree.h"
 #include "Transform.h"
 #include "Signal.h"
+
+class NodeTree;
 
 class Node
 {
@@ -30,6 +33,9 @@ public:
 	template<typename T>
 	T* As() { return dynamic_cast<T*>(this); }
 
+	void SetTree(NodeTree* tree) { m_tree = tree; }
+	NodeTree* GetTree() const { return m_tree; }
+
 public:
 	Transform transform;
 	Node* parent = nullptr;
@@ -40,5 +46,8 @@ public:
 
 protected:
 	virtual void OnDestroy();
+
+protected:
+	NodeTree* m_tree;
 };
 

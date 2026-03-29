@@ -12,6 +12,7 @@
 
 //class Actor;
 
+class NodeTree;
 class CameraNode;
 
 class ComputerGraphicsApp : public aie::Application {
@@ -19,49 +20,29 @@ public:
 	static ComputerGraphicsApp* Get();
 	~ComputerGraphicsApp() override;
 
+public:
 	bool startup() override;
 	void shutdown() override;
 
 	void update(float deltaTime) override;
 	void draw() override;
 
-	void AddToFreeQueue(Node* node);
-	void RegisterNode(Node* node);
-	void RemoveNode(Node* node);
-	void RegisterPreDraw(Node* node);
-	void RemovePreDraw(Node* node);
-
+public:
 	[[nodiscard]] glm::mat4 GetViewMatrix() const { return m_viewMatrix; }
 	[[nodiscard]] glm::mat4 GetProjectionMatrix() const { return m_projectionMatrix; }
 
 	void SetViewMatrix(const glm::mat4& view) { m_viewMatrix = view; }
 	void SetProjectionMatrix(const glm::mat4& projection) { m_projectionMatrix = projection; }
 
-	void SetActiveCamera(CameraNode* camera) { m_activeCamera = camera; }
-	CameraNode* GetActiveCamera() const { return m_activeCamera; }
-
-	void MarkLightingDirty();
-
-public:
-	Environment environment;
-	Signal<> buildLights;
+	NodeTree* GetTree() const;
 
 protected:
-	// camera transforms
-	glm::mat4	m_viewMatrix;
-	glm::mat4	m_projectionMatrix;
-
-	float m_timeScale = 1.f;
-
-	std::vector<Node*> m_nodes; // List of nodes in the scene
-	std::vector<Node*> m_preDrawNodes; // Execute between tick and draw (for objects like the camera which need to update the app's projection matrix)
-	std::vector<Node*> m_freeQueue;
+	NodeTree* m_nodeTree;
 
 	bool m_vsync = true;
 
-	CameraNode* m_activeCamera;
-
-	bool m_lightingDirty = true;
+	glm::mat4	m_viewMatrix;
+	glm::mat4	m_projectionMatrix;
 
 private:
 	ComputerGraphicsApp();

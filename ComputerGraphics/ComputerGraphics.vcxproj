@@ -175,6 +175,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CameraNode.cpp" />
+    <ClCompile Include="Environment.cpp" />
     <ClCompile Include="LightNode.cpp" />
     <ClCompile Include="MeshNode.cpp" />
     <ClCompile Include="MotionNode.cpp" />
@@ -182,6 +183,7 @@
     <ClCompile Include="ComputerGraphicsApp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="NodeTree.cpp" />
     <ClCompile Include="OBJMesh.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Transform.cpp" />
@@ -197,6 +199,7 @@
     <ClInclude Include="ComputerGraphicsApp.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="NodeTree.h" />
     <ClInclude Include="OBJMesh.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Signal.h" />

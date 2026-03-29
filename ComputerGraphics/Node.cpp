@@ -11,7 +11,7 @@ Node::Node(const Transform& transform, Node* parent, std::string name)
 {
 	if (parent)
 		parent->AddChild(this);
-	ComputerGraphicsApp::Get()->RegisterNode(this);
+	ComputerGraphicsApp::Get()->GetTree()->RegisterNode(this);
 }
 
 Node::~Node()
@@ -20,7 +20,7 @@ Node::~Node()
 
 	for (auto &child : children)
 	{
-		delete child;
+		child->Free();
 		child = nullptr;
 	}
 }
@@ -41,13 +41,13 @@ void Node::Free()
 {
 	if (parent)
 		parent->RemoveChild(this);
-	ComputerGraphicsApp::Get()->RemoveNode(this);
+	m_tree->RemoveNode(this);
 	delete this;
 }
 
 void Node::QueueFree()
 {
-	ComputerGraphicsApp::Get()->AddToFreeQueue(this);
+	m_tree->AddToFreeQueue(this);
 }
 
 void Node::RemoveChild(Node* actor)
