@@ -21,6 +21,7 @@ public:
 
 public:
 	void AddToFreeQueue(Node* node);
+	void QueueRegisterNode(Node* node);
 	void RegisterNode(Node* node);
 	void RemoveNode(Node* node);
 	void RegisterPreDraw(Node* node);
@@ -39,8 +40,9 @@ protected:
 	std::vector<Node*> m_nodes; // List of nodes in the scene
 	std::vector<Node*> m_preDrawNodes; // Execute between tick and draw (for objects like the camera which need to update the app's projection matrix)
 	std::vector<Node*> m_freeQueue;
+	std::vector<Node*> m_addQueue;
 
 protected:
-	CameraNode* m_activeCamera;
+	CameraNode* m_activeCamera = nullptr;
 };
 

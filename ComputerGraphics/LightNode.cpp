@@ -7,7 +7,6 @@
 LightNode::LightNode(const Transform& transform, Node* parent, std::string name, const Light& light)
 	:Node(transform, parent, std::move(name)), m_lightData(light)
 {
-	this->transform.dirtied.Connect(this, [this] {m_tree->environment.MarkLightingDirty(); });
 }
 
 void LightNode::UpdateLightData()
@@ -18,6 +17,15 @@ void LightNode::UpdateLightData()
 Light LightNode::GetLightData() const
 {
 	return m_lightData;
+}
+
+void LightNode::Ready()
+{
+	printf("Light\n");
+	Node::Ready();
+	printf("m_tree: %p\n", m_tree);
+	transform.dirtied.Connect(m_tree, [this] {this->m_tree->environment.MarkLightingDirty(); });
+	m_tree->environment.buildLights.Connect(this, [this] {RebuildLight(); });
 }
 
 void LightNode::Tick(float delta)
@@ -58,8 +66,10 @@ void LightNode::RebuildLight()
 	auto& environment = m_tree->environment;
 	const int& index = environment.registeredLights;
 
-	m_tree->environment.pointLightColours[index] = m_lightData.diffuse * m_lightData.intensity;
-	m_tree->environment.pointLightPositions[index] = GlobalTransform().GetPosition();
+	environment.pointLightColours[index] = m_lightData.diffuse * m_lightData.intensity;
+	environment.pointLightPositions[index] = GlobalTransform().GetPosition();
 
 	environment.registeredLights++;
+
+	printf("Built light at index %i\n", environment.registeredLights);
 }

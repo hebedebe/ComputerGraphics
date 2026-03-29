@@ -6,12 +6,12 @@
 #include <ranges>
 //#include <glm/ext.hpp>
 
-Node::Node(const Transform& transform, Node* parent, std::string name)
+Node::Node(Transform transform, Node* parent, std::string name)
 	:transform(transform), parent(parent), name(std::move(name))
 {
 	if (parent)
 		parent->AddChild(this);
-	ComputerGraphicsApp::Get()->GetTree()->RegisterNode(this);
+	ComputerGraphicsApp::Get()->GetTree()->QueueRegisterNode(this);
 }
 
 Node::~Node()
@@ -23,6 +23,11 @@ Node::~Node()
 		child->Free();
 		child = nullptr;
 	}
+}
+
+void Node::Ready()
+{
+	printf("Node ready\n");
 }
 
 void Node::Tick(float delta)

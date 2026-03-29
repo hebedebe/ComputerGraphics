@@ -15,6 +15,7 @@ public:
     void UpdateLightData();
     Light GetLightData() const;
 
+    void Ready() override;
     void Tick(float delta) override;
     void Draw() override;
 

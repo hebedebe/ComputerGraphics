@@ -12,10 +12,11 @@ class NodeTree;
 class Node
 {
 public:
-	explicit Node(const Transform& transform, Node* parent = nullptr, std::string name = "Node");
-	~Node();
+	explicit Node(Transform transform, Node* parent = nullptr, std::string name = "Node");
+	virtual ~Node();
 
 public:
+	virtual void Ready();
 	virtual void Tick(float delta);
 	virtual void PreDraw();
 	virtual void Draw();

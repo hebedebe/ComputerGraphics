@@ -30,6 +30,11 @@ void MeshNode::Draw()
 	}
 }
 
+void MeshNode::Ready()
+{
+	Node::Ready();
+}
+
 void MeshNode::LoadMesh(const char* filename, const bool loadTextures, const bool flipTextureV)
 {
 	if (m_meshObj.load(filename, loadTextures, flipTextureV))
@@ -70,7 +75,7 @@ void MeshNode::InitialiseStandardShader()
 void MeshNode::StandardBindFunction(aie::ShaderProgram& program, MeshNode* meshNode)
 {
 	const auto app = ComputerGraphicsApp::Get();
-	const auto& tree = meshNode->GetTree();
+	const auto tree = meshNode->GetTree();
 
 	CameraNode* camera = tree->GetActiveCamera();
 

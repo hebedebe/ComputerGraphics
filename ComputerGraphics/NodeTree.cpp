@@ -17,6 +17,12 @@ void NodeTree::Tick(const float deltaTime)
 {
 	const float scaledDelta = deltaTime * timeScale;
 
+	for (const auto node : m_addQueue)
+	{
+		RegisterNode(node);
+	}
+	m_addQueue.clear();
+
 	for (const auto node : m_nodes)
 	{
 		node->Tick(scaledDelta);
@@ -41,6 +47,8 @@ void NodeTree::PreDraw()
 
 void NodeTree::Draw() const
 {
+	if (not m_activeCamera) return;
+
 	for (const auto node : m_nodes)
 	{
 		if (node->visible)
@@ -53,10 +61,16 @@ void NodeTree::AddToFreeQueue(Node* node)
 	m_freeQueue.emplace_back(node);
 }
 
+void NodeTree::QueueRegisterNode(Node* node)
+{
+	m_addQueue.emplace_back(node);
+}
+
 void NodeTree::RegisterNode(Node* node)
 {
 	m_nodes.emplace_back(node);
 	node->SetTree(this);
+	node->Ready();
 }
 
 void NodeTree::RemoveNode(Node* node)

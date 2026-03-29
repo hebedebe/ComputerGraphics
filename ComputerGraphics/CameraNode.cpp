@@ -10,17 +10,37 @@ CameraNode::CameraNode(const Transform& transform, Node* parent, std::string nam
 {
 }
 
+void CameraNode::Ready()
+{
+	Node::Ready();
+
+}
+
 void CameraNode::Tick(const float delta)
 {
 	Node::Tick(delta);
+
+	if (m_active != m_desiredActive)
+	{
+		m_active = m_desiredActive;
+		if (m_active)
+		{
+			m_tree->RegisterPreDraw(this);
+		}
+		else
+		{
+			m_tree->RemovePreDraw(this);
+			return;
+		}
+	}
 
 	if (m_active)
 	{
 		constexpr float moveSpeed = 3.f;
 		constexpr float rotationSpeed = 20.f;
 
-		glm::vec3 position(0, 0, 0);
-		glm::vec3 rotation(0, 0, 0);
+		vec3 position(0, 0, 0);
+		vec3 rotation(0, 0, 0);
 
 		ImGui::Begin("Camera controls");
 		ImGui::SliderFloat3("Position", value_ptr(position), -moveSpeed, moveSpeed);
@@ -75,16 +95,7 @@ glm::mat4 CameraNode::GetProjectionMatrix() const
 
 void CameraNode::SetActive(const bool active)
 {
-	if (active == m_active) return;
-	m_active = active;
-	if (active)
-	{
-		m_tree->RegisterPreDraw(this);
-	}
-	else
-	{
-		m_tree->RemovePreDraw(this);
-	}
+	m_desiredActive = active;
 }
 
 void CameraNode::OnDestroy()

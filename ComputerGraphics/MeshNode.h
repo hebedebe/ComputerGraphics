@@ -38,6 +38,7 @@ public:
 
 public:
     void Draw() override;
+    void Ready() override;
 
     template <typename T>
     T& GetMesh() { return nullptr; }

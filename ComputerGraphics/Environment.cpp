@@ -3,6 +3,7 @@
 void Environment::MarkLightingDirty()
 {
 	lightingDirty = true;
+	printf("Marked lighting dirty\n");
 }
 
 void Environment::Update()
@@ -12,5 +13,6 @@ void Environment::Update()
 		lightingDirty = false;
 		registeredLights = 0;
 		buildLights.Emit();
+		printf("Built lights\n");
 	}
 }

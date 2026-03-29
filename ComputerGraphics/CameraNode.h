@@ -15,8 +15,8 @@ public:
 	explicit CameraNode(const Transform& transform, Node* parent = nullptr, std::string name = "Camera");
 
 public:
+	void Ready() override;
 	void Tick(float delta) override;
-
 	void PreDraw() override;
 
     [[nodiscard]] glm::mat4 GetViewMatrix();
@@ -37,6 +37,7 @@ protected:
 private:
     ProjectionMode m_projectionMode = ProjectionMode::PERSPECTIVE; //Default because orthographic sucks
 	bool m_active = false;
+	bool m_desiredActive = false;
 };
 	
 

@@ -38,14 +38,14 @@ bool ComputerGraphicsApp::startup() {
 	// initialise gizmo primitive counts
 	Gizmos::create(10000, 10000, 10000, 10000);
 
-	const auto testingMesh = new MeshNode(Transform());
+	MeshNode* testingMesh = new MeshNode(Transform());
 	testingMesh->InitialiseStandardShader();
 	testingMesh->LoadMesh("./models/soulspear/soulspear.obj", true, true);
 
 	new LightNode(Transform({-1, 2, 0}));
 	new LightNode(Transform({1, 2, 0}), nullptr, "Light2", {{0,1,0}});
 
-	auto camera = new CameraNode(Transform(vec3(0, 5, 10), vec3(-0.5f, 0, 0)));
+	const auto camera = new CameraNode(Transform(vec3(0, 5, 10), vec3(-0.5f, 0, 0)));
 	camera->SetActive(true);
 
 	camera->transform.SetPosition(vec3(0,-10,-10));

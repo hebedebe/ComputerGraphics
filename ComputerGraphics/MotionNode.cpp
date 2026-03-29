@@ -2,8 +2,8 @@
 
 #include <utility>
 
-MotionNode::MotionNode(const Transform& transform, const Transform& motionTransform, Node* parent, std::string name)
-	:Node(transform, parent, std::move(name)), motionTransform(motionTransform)
+MotionNode::MotionNode(const Transform& transform, Transform motionTransform, Node* parent, std::string name)
+	:Node(transform, parent, std::move(name)), motionTransform(std::move(motionTransform))
 {
 }
 
