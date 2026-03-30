@@ -4,14 +4,6 @@
 #include "RenderTarget.h"
 #include "Shader.h"
 
-struct PostProcessEffect
-{
-    aie::ShaderProgram program;
-
-public:
-    PostProcessEffect(const char* fragPath);
-};
-
 class PostProcessNode :
     public Node
 {
@@ -23,19 +15,14 @@ public:
     void PostDraw() override;
 
 public:
-    void AddEffect(const PostProcessEffect& effect);
+    void SetEffect(const char* filepath);
 
 public:
     aie::RenderTarget* sourceTarget;
 
 protected:
-    std::vector<PostProcessEffect> m_effects;
-
-    aie::RenderTarget m_bufferOne;
-    aie::RenderTarget m_bufferTwo;
-
     Mesh m_screenQuad;
 
-    aie::ShaderProgram m_defaultShader;
+    aie::ShaderProgram m_shader;
 };
 

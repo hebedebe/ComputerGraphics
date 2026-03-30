@@ -9,6 +9,7 @@
 #include "CameraNode.h"
 #include "Gizmos.h"
 #include "Input.h"
+#include "LightNode.h"
 #include "Node.h"
 #include "MeshNode.h"
 #include "NodeTree.h"
@@ -37,9 +38,12 @@ bool ComputerGraphicsApp::startup() {
 	Gizmos::create(10000, 10000, 10000, 10000);
 
 	const auto mesh = new MeshNode(Transform());
-	mesh->LoadMesh("./models/soulspear/soulspear.obj");
+	mesh->LoadMesh("./models/soulspear/soulspear.obj", true, true);
 	//a->SetMeshType(MeshNode::MeshType::OBJ);
 	mesh->InitialiseStandardShader();
+
+	auto light = new LightNode(Transform());
+	light->transform.Move({0,0,2});
 
 	const auto camera = new CameraNode(Transform(vec3(0, 5, 10), vec3(-0.5f, 0, 0)));
 	camera->SetActive(true);
@@ -47,7 +51,7 @@ bool ComputerGraphicsApp::startup() {
 
 	const auto postProcess = new PostProcessNode(Transform());
 	postProcess->sourceTarget = camera->renderTarget;
-	//postProcess->AddEffect(PostProcessEffect("./shaders/post_UV.frag"));
+	postProcess->SetEffect("./shaders/post_blur.frag");
 
 	camera->transform.SetPosition(vec3(0,-10,-10));
 	camera->transform.SetRotationDegrees(vec3(45, 0, 0));
