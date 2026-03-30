@@ -19,24 +19,39 @@
     <Filter Include="Source Files\Nodes">
       <UniqueIdentifier>{87f96d19-cc95-4b21-8765-145da4609b22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{4d95054b-0139-456c-a303-11485452f482}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{e80058a8-f930-4946-a606-f602b3893be7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering">
+      <UniqueIdentifier>{4a5c2a3b-5d84-45d8-8996-aa1b0673a20a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rendering">
+      <UniqueIdentifier>{ab3c5a1e-0e12-401a-bf60-a0afacffbbf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Filesystem">
+      <UniqueIdentifier>{381071e0-62f2-4e31-bba1-0c99b7083d63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Filesystem">
+      <UniqueIdentifier>{44b0a492-0d94-4f04-bbd3-ab879ff9b185}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Math">
+      <UniqueIdentifier>{856face6-c6f3-4869-b2f5-e083b8ed5734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Math">
+      <UniqueIdentifier>{51e418df-180c-47bd-9af3-675819d1e5ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Misc">
+      <UniqueIdentifier>{7c610b4a-6d44-482b-a215-892d9beb23d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Misc">
+      <UniqueIdentifier>{d8fd2759-39c8-4245-92bc-203598ca27a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ComputerGraphicsApp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OBJMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MeshNode.cpp">
@@ -54,33 +69,30 @@
     <ClCompile Include="Node.cpp">
       <Filter>Source Files\Nodes</Filter>
     </ClCompile>
-    <ClCompile Include="NodeTree.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="ComputerGraphicsApp.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Environment.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="NodeTree.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="OBJMesh.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source Files\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ComputerGraphicsApp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Constants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="tiny_obj_loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OBJMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MeshNode.h">
@@ -92,28 +104,46 @@
     <ClInclude Include="CameraNode.h">
       <Filter>Header Files\Nodes</Filter>
     </ClInclude>
-    <ClInclude Include="Environment.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Signal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="LightNode.h">
       <Filter>Header Files\Nodes</Filter>
     </ClInclude>
     <ClInclude Include="Node.h">
       <Filter>Header Files\Nodes</Filter>
     </ClInclude>
+    <ClInclude Include="ComputerGraphicsApp.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
     <ClInclude Include="NodeTree.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="OBJMesh.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="tiny_obj_loader.h">
+      <Filter>Header Files\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Signal.h">
+      <Filter>Header Files\Misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Signal.inl">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Misc</Filter>
     </None>
   </ItemGroup>
 </Project>
