@@ -97,6 +97,9 @@ void ComputerGraphicsApp::update(float deltaTime) {
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
 
+	if (input->wasKeyPressed(aie::INPUT_KEY_GRAVE_ACCENT))
+		m_debug = !m_debug;
+
 }
 
 void ComputerGraphicsApp::draw() 

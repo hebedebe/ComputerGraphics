@@ -10,7 +10,9 @@
 #include "Node.h"
 
 
-//class Actor;
+#define _DEBUG_ENABLED ComputerGraphicsApp::Get()->GetDebug()
+#define _IF_DEBUG if (_DEBUG_ENABLED)
+#define _IF_NOT_DEBUG if (!_DEBUG_ENABLED)
 
 class NodeTree;
 class CameraNode;
@@ -36,6 +38,9 @@ public:
 
 	NodeTree* GetTree() const;
 
+	void SetDebug(const bool debug) { m_debug = debug; }
+	bool GetDebug() const { return m_debug; }
+
 protected:
 	NodeTree* m_nodeTree;
 
@@ -43,6 +48,8 @@ protected:
 
 	glm::mat4	m_viewMatrix;
 	glm::mat4	m_projectionMatrix;
+
+	bool m_debug = false;
 
 private:
 	ComputerGraphicsApp();

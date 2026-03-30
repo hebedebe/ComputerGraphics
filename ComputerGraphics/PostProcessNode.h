@@ -11,6 +11,7 @@ public:
     PostProcessNode(Transform transform, Node* parent = nullptr, std::string name = "PostProcess");
 
 public:
+    void Tick(float delta) override;
     void Ready() override;
     void PostDraw() override;
 
@@ -24,5 +25,9 @@ protected:
     Mesh m_screenQuad;
 
     aie::ShaderProgram m_shader;
+
+
+private:
+    char m_filePathBuffer[64] = "Enter path here (64 char max)";
 };
 

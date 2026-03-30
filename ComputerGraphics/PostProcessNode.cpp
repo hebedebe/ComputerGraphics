@@ -4,11 +4,28 @@
 #include <utility>
 
 #include "ComputerGraphicsApp.h"
+#include "imgui.h"
 
 
 PostProcessNode::PostProcessNode(Transform transform, Node* parent, std::string name)
 	:Node(std::move(transform), parent, std::move(name))
 {
+}
+
+void PostProcessNode::Tick(float delta)
+{
+	Node::Tick(delta);
+
+	_IF_NOT_DEBUG return;
+
+	ImGui::Begin("Postprocess");
+	ImGui::InputText("Path", m_filePathBuffer, 64);
+	if (ImGui::Button("Load fragment"))
+	{
+		m_shader = aie::ShaderProgram();
+		SetEffect(m_filePathBuffer);
+	}
+	ImGui::End();
 }
 
 void PostProcessNode::Ready()

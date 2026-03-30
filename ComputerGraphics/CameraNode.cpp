@@ -34,6 +34,8 @@ void CameraNode::Tick(const float delta)
 		}
 	}
 
+	_IF_NOT_DEBUG return;
+
 	if (m_active)
 	{
 		constexpr float moveSpeed = 3.f;

@@ -30,6 +30,8 @@ void LightNode::Tick(float delta)
 {
 	Node::Tick(delta);
 
+	_IF_NOT_DEBUG return;
+
 	ImGui::Begin(GetUniqueName().c_str());
 
 	vec3 position = _VEC3_ZERO;
