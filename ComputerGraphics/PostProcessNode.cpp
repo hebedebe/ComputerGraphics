@@ -18,7 +18,7 @@ void PostProcessNode::Tick(float delta)
 
 	_IF_NOT_DEBUG return;
 
-	ImGui::Begin("Postprocess");
+	ImGui::Begin(GetUniqueName().c_str());
 	ImGui::InputText("Path", m_filePathBuffer, 64);
 	if (ImGui::Button("Load fragment"))
 	{
@@ -53,6 +53,8 @@ void PostProcessNode::PostDraw()
 
 	if (not sourceTarget) return;
 
+	if (outputTarget) outputTarget->bind();
+
 	app->clearScreen();
 	
 	m_shader.bind();
@@ -61,7 +63,8 @@ void PostProcessNode::PostDraw()
 	sourceTarget->getTarget(0).bind(0);
 
 	m_screenQuad.Draw();
-
+	
+	if (outputTarget) outputTarget->unbind();
 }
 
 void PostProcessNode::SetEffect(const char* filepath)
@@ -73,4 +76,21 @@ void PostProcessNode::SetEffect(const char* filepath)
 		printf(std::format("Shader error: {}", m_shader.getLastError()).c_str());
 		throw std::exception(std::format("Shader error: {}", m_shader.getLastError()).c_str());
 	}
+}
+
+void PostProcessNode::InitOutputTarget()
+{
+	const auto app = ComputerGraphicsApp::Get();
+	outputTarget = new aie::RenderTarget;
+	if (!outputTarget->initialise(1, app->getWindowWidth(), app->getWindowHeight()))
+	{
+		printf("An error occured initialising a postprocess node output render target.\n");
+	}
+}
+
+void PostProcessNode::OnDestroy()
+{
+	Node::OnDestroy();
+
+	delete outputTarget;
 }

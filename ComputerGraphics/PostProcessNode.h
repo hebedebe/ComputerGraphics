@@ -17,9 +17,14 @@ public:
 
 public:
     void SetEffect(const char* filepath);
+    void InitOutputTarget();
 
 public:
     aie::RenderTarget* sourceTarget;
+    aie::RenderTarget* outputTarget = nullptr;
+
+protected:
+    void OnDestroy() override;
 
 protected:
     Mesh m_screenQuad;
