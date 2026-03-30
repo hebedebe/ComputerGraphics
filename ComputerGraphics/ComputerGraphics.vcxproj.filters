@@ -43,10 +43,10 @@
     <Filter Include="Header Files\Math">
       <UniqueIdentifier>{51e418df-180c-47bd-9af3-675819d1e5ff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Misc">
+    <Filter Include="Header Files\Utility">
       <UniqueIdentifier>{7c610b4a-6d44-482b-a215-892d9beb23d8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Misc">
+    <Filter Include="Source Files\Utility">
       <UniqueIdentifier>{d8fd2759-39c8-4245-92bc-203598ca27a8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -99,6 +99,9 @@
     <ClCompile Include="ProfilerNode.cpp">
       <Filter>Source Files\Nodes</Filter>
     </ClCompile>
+    <ClCompile Include="Loader.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h">
@@ -147,7 +150,7 @@
       <Filter>Header Files\Math</Filter>
     </ClInclude>
     <ClInclude Include="Signal.h">
-      <Filter>Header Files\Misc</Filter>
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Range.h">
       <Filter>Header Files\Math</Filter>
@@ -161,10 +164,13 @@
     <ClInclude Include="ProfilerNode.h">
       <Filter>Header Files\Nodes</Filter>
     </ClInclude>
+    <ClInclude Include="Loader.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Signal.inl">
-      <Filter>Header Files\Misc</Filter>
+      <Filter>Header Files\Utility</Filter>
     </None>
   </ItemGroup>
 </Project>

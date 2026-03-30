@@ -30,16 +30,19 @@ public:
 	void draw() override;
 
 public:
-	[[nodiscard]] glm::mat4 GetViewMatrix() const { return m_viewMatrix; }
-	[[nodiscard]] glm::mat4 GetProjectionMatrix() const { return m_projectionMatrix; }
+	[[nodiscard]] mat4 GetViewMatrix() const { return m_viewMatrix; }
+	[[nodiscard]] mat4 GetProjectionMatrix() const { return m_projectionMatrix; }
 
-	void SetViewMatrix(const glm::mat4& view) { m_viewMatrix = view; }
-	void SetProjectionMatrix(const glm::mat4& projection) { m_projectionMatrix = projection; }
+	void SetViewMatrix(const mat4& view) { m_viewMatrix = view; }
+	void SetProjectionMatrix(const mat4& projection) { m_projectionMatrix = projection; }
 
 	NodeTree* GetTree() const;
 
 	void SetDebug(const bool debug) { m_debug = debug; }
 	bool GetDebug() const { return m_debug; }
+
+public:
+	Signal<ComputerGraphicsApp*> startupCompleteSignal;
 
 protected:
 	NodeTree* m_nodeTree;

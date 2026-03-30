@@ -38,28 +38,10 @@ bool ComputerGraphicsApp::startup() {
 	// initialise gizmo primitive counts
 	Gizmos::create(10000, 10000, 10000, 10000);
 
-	const auto mesh = new MeshNode(Transform());
-	mesh->LoadMesh("./models/soulspear/soulspear.obj", true, true);
-	//a->SetMeshType(MeshNode::MeshType::OBJ);
-	mesh->InitialiseStandardShader();
-
-	auto light = new LightNode(Transform());
-	light->transform.Move({0,0,2});
-
-	const auto camera = new CameraNode(Transform(vec3(0, 5, 10), vec3(-0.5f, 0, 0)));
-	camera->SetActive(true);
-	camera->InitRenderTarget();
-
-	const auto profiler = new ProfilerNode;
-
-	const auto postProcess = new PostProcessNode(Transform());
-	postProcess->sourceTarget = camera->renderTarget;
-	postProcess->SetEffect("./shaders/post_blur.frag");
-
-	camera->transform.SetPosition(vec3(0,-10,-10));
-	camera->transform.SetRotationDegrees(vec3(45, 0, 0));
-
 	std::cout << "Startup completed in " << getTime() - startTime << " seconds\n";
+
+	startupCompleteSignal.Emit(this);
+
 	return true;
 }
 
@@ -117,7 +99,7 @@ NodeTree* ComputerGraphicsApp::GetTree() const
 }
 
 ComputerGraphicsApp::ComputerGraphicsApp()
-	:m_nodeTree(new NodeTree)
+	:Application(), m_nodeTree(new NodeTree)
 {
 	std::cout << "Constructed ComputerGraphicsApp.\n";
 }

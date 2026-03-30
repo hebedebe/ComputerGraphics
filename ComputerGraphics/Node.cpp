@@ -11,7 +11,7 @@ Node::Node(Transform transform, Node* parent, std::string name)
 {
 	if (parent)
 		parent->AddChild(this);
-	ComputerGraphicsApp::Get()->GetTree()->QueueRegisterNode(this);
+	//ComputerGraphicsApp::Get()->GetTree()->QueueRegisterNode(this);
 }
 
 Node::~Node()

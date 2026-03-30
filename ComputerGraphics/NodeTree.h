@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "Environment.h"
+#include "Loader.h"
 
 class CameraNode;
 class Node;
@@ -21,17 +22,30 @@ public:
 	void PostDraw();
 
 public:
+	void OverwriteFromLoader(Loader& loader);
+
+	void Clear();
+
 	void AddToFreeQueue(Node* node);
-	void QueueRegisterNode(Node* node);
-	
-	void RegisterNode(Node* node);
 	void RemoveNode(Node* node);
+	
+	void QueueRegisterNode(Node* node);
+	void RegisterNode(Node* node);
 
 	void RegisterPreDraw(Node* node);
 	void RemovePreDraw(Node* node);
 
 	void RegisterPostDraw(Node* node);
 	void RemovePostDraw(Node* node);
+
+	template<typename T, typename ...Args>
+	T* CreateNode(Args... args)
+	{
+		static_assert(std::is_base_of_v<Node, T>, "CreateNode type must be derived from base Node");
+		T* node = new T(args...);
+		QueueRegisterNode(node);
+		return node;
+	}
 
 public:
 	void SetActiveCamera(CameraNode* camera) { m_activeCamera = camera; }

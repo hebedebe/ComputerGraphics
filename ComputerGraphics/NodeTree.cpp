@@ -75,6 +75,20 @@ void NodeTree::PostDraw()
 	}
 }
 
+void NodeTree::OverwriteFromLoader(Loader& loader)
+{
+	Clear();
+	loader.Load(this);
+}
+
+void NodeTree::Clear()
+{
+	for (int i = 0; i < m_nodes.size(); i++)
+	{
+		m_nodes[i]->Free();
+	}
+}
+
 void NodeTree::AddToFreeQueue(Node* node)
 {
 	m_freeQueue.emplace_back(node);
@@ -87,6 +101,7 @@ void NodeTree::QueueRegisterNode(Node* node)
 
 void NodeTree::RegisterNode(Node* node)
 {
+	printf("Registered node\n");
 	m_nodes.emplace_back(node);
 	node->SetTree(this);
 	node->Ready();
