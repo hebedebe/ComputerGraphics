@@ -41,6 +41,10 @@ void Node::Draw()
 {
 }
 
+void Node::PostDraw()
+{
+}
+
 void Node::Free()
 {
 	if (parent)

@@ -68,6 +68,19 @@ void CameraNode::PreDraw()
 	m_tree->SetActiveCamera(this);
 	app->SetProjectionMatrix(GetProjectionMatrix());
 	app->SetViewMatrix(GetViewMatrix());
+
+	if (renderTarget)
+	{
+		renderTarget->bind();
+		
+		m_tree->Draw();
+
+		renderTarget->unbind();
+	} else
+	{
+		m_tree->Draw();
+	}
+
 }
 
 glm::mat4 CameraNode::GetViewMatrix()
@@ -98,9 +111,21 @@ void CameraNode::SetActive(const bool active)
 	m_desiredActive = active;
 }
 
+void CameraNode::InitRenderTarget()
+{
+	const auto app = ComputerGraphicsApp::Get();
+	renderTarget = new aie::RenderTarget;
+	if (!renderTarget->initialise(1, app->getWindowWidth(), app->getWindowHeight()))
+	{
+		printf("Render target error!\n");
+	}
+}
+
 void CameraNode::OnDestroy()
 {
 	Node::OnDestroy();
+
+	delete renderTarget;
 
 	if (m_active) m_tree->RemovePreDraw(this);
 }

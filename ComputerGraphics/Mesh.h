@@ -20,6 +20,7 @@ public:
 	void Initialise(const unsigned long vertexCount, const Vertex* vertices, const unsigned int indexCount = 0, const unsigned int* indices = nullptr);
 
 	void InitialiseQuad();
+	void InitialiseFullscreenQuad();
 	void InitialiseCube();
 	void InitialisePyramid();
 	void InitialiseCylinder(float radius = 0.5f, float height = 1.f, unsigned int segments = 12);

@@ -10,11 +10,9 @@
 #include "Gizmos.h"
 #include "Input.h"
 #include "Node.h"
-#include "imgui.h"
-#include "LightNode.h"
 #include "MeshNode.h"
-#include "MotionNode.h"
 #include "NodeTree.h"
+#include "PostProcessNode.h"
 #include "Transform.h"
 
 using glm::vec3;
@@ -31,22 +29,25 @@ ComputerGraphicsApp* ComputerGraphicsApp::Get()
 }
 
 bool ComputerGraphicsApp::startup() {
-	
-	auto startTime = getTime();
+
+	const auto startTime = getTime();
 	setBackgroundColour(0.25f, 0.25f, 0.25f);
 
 	// initialise gizmo primitive counts
 	Gizmos::create(10000, 10000, 10000, 10000);
 
-	MeshNode* testingMesh = new MeshNode(Transform());
-	testingMesh->InitialiseStandardShader();
-	testingMesh->LoadMesh("./models/soulspear/soulspear.obj", true, true);
-
-	new LightNode(Transform({-1, 2, 0}));
-	new LightNode(Transform({1, 2, 0}), nullptr, "Light2", {{0,1,0}});
+	const auto mesh = new MeshNode(Transform());
+	mesh->LoadMesh("./models/soulspear/soulspear.obj");
+	//a->SetMeshType(MeshNode::MeshType::OBJ);
+	mesh->InitialiseStandardShader();
 
 	const auto camera = new CameraNode(Transform(vec3(0, 5, 10), vec3(-0.5f, 0, 0)));
 	camera->SetActive(true);
+	camera->InitRenderTarget();
+
+	const auto postProcess = new PostProcessNode(Transform());
+	postProcess->sourceTarget = camera->renderTarget;
+	//postProcess->AddEffect(PostProcessEffect("./shaders/post_UV.frag"));
 
 	camera->transform.SetPosition(vec3(0,-10,-10));
 	camera->transform.SetRotationDegrees(vec3(45, 0, 0));
@@ -93,20 +94,9 @@ void ComputerGraphicsApp::update(float deltaTime) {
 
 void ComputerGraphicsApp::draw() 
 {
-	if (m_nodeTree)
-	{
-		setBackgroundColour
-		(
-			m_nodeTree->environment.backgroundColor.r,
-			m_nodeTree->environment.backgroundColor.g,
-			m_nodeTree->environment.backgroundColor.b
-		);
-	}
-	clearScreen();
-
 	m_nodeTree->PreDraw();
 
-	m_nodeTree->Draw();
+	m_nodeTree->PostDraw();
 
 	Gizmos::draw(m_projectionMatrix * m_viewMatrix);
 }

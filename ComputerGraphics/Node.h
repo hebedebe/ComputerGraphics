@@ -20,6 +20,7 @@ public:
 	virtual void Tick(float delta);
 	virtual void PreDraw();
 	virtual void Draw();
+	virtual void PostDraw();
 
 	void Free();
 	void QueueFree();

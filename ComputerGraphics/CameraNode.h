@@ -1,5 +1,6 @@
 #pragma once
 #include "Node.h"
+#include "RenderTarget.h"
 
 class CameraNode :
     public Node
@@ -24,7 +25,11 @@ public:
 
     void SetActive(bool active);
 
+	void InitRenderTarget();
+
 public:
+	aie::RenderTarget* renderTarget = nullptr;
+
     float fov = 90.f;
 	float width = 16.f;
     float height = 9.f;

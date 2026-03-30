@@ -1,5 +1,6 @@
 #include "NodeTree.h"
 
+#include "ComputerGraphicsApp.h"
 #include "Node.h"
 
 
@@ -49,10 +50,28 @@ void NodeTree::Draw() const
 {
 	if (not m_activeCamera) return;
 
+	const auto app = ComputerGraphicsApp::Get();
+
+	app->setBackgroundColour
+	(
+		environment.backgroundColor.r,
+		environment.backgroundColor.g,
+		environment.backgroundColor.b
+	);
+	app->clearScreen();
+
 	for (const auto node : m_nodes)
 	{
 		if (node->visible)
 			node->Draw();
+	}
+}
+
+void NodeTree::PostDraw()
+{
+	for (const auto node : m_postDrawNodes)
+	{
+		node->PostDraw();
 	}
 }
 
@@ -76,6 +95,8 @@ void NodeTree::RegisterNode(Node* node)
 void NodeTree::RemoveNode(Node* node)
 {
 	m_nodes.erase(std::ranges::find(m_nodes, node));
+	RemovePreDraw(node);
+	RemovePostDraw(node);
 }
 
 void NodeTree::RegisterPreDraw(Node* node)
@@ -89,4 +110,16 @@ void NodeTree::RemovePreDraw(Node* node)
 	if (iter != m_preDrawNodes.end())
 		m_preDrawNodes.erase(iter);
 
+}
+
+void NodeTree::RegisterPostDraw(Node* node)
+{
+	m_postDrawNodes.emplace_back(node);
+}
+
+void NodeTree::RemovePostDraw(Node* node)
+{
+	const auto iter = std::ranges::find(m_postDrawNodes, node);
+	if (iter != m_postDrawNodes.end())
+		m_postDrawNodes.erase(iter);
 }
