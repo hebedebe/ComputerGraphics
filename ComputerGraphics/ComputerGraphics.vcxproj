@@ -176,6 +176,7 @@
   <ItemGroup>
     <ClCompile Include="CameraNode.cpp" />
     <ClCompile Include="Environment.cpp" />
+    <ClCompile Include="ProfilerNode.cpp" />
     <ClCompile Include="LightNode.cpp" />
     <ClCompile Include="MeshNode.cpp" />
     <ClCompile Include="MotionNode.cpp" />
@@ -193,6 +194,7 @@
   <ItemGroup>
     <ClInclude Include="CameraNode.h" />
     <ClInclude Include="Environment.h" />
+    <ClInclude Include="ProfilerNode.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightNode.h" />
     <ClInclude Include="MeshNode.h" />

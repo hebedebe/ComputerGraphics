@@ -96,6 +96,9 @@
     <ClCompile Include="PostProcessNode.cpp">
       <Filter>Source Files\Nodes</Filter>
     </ClCompile>
+    <ClCompile Include="ProfilerNode.cpp">
+      <Filter>Source Files\Nodes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h">
@@ -153,6 +156,9 @@
       <Filter>Header Files\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="PostProcessNode.h">
+      <Filter>Header Files\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfilerNode.h">
       <Filter>Header Files\Nodes</Filter>
     </ClInclude>
   </ItemGroup>

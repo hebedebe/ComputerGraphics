@@ -14,6 +14,7 @@
 #include "MeshNode.h"
 #include "NodeTree.h"
 #include "PostProcessNode.h"
+#include "ProfilerNode.h"
 #include "Transform.h"
 
 using glm::vec3;
@@ -48,6 +49,8 @@ bool ComputerGraphicsApp::startup() {
 	const auto camera = new CameraNode(Transform(vec3(0, 5, 10), vec3(-0.5f, 0, 0)));
 	camera->SetActive(true);
 	camera->InitRenderTarget();
+
+	const auto profiler = new ProfilerNode;
 
 	const auto postProcess = new PostProcessNode(Transform());
 	postProcess->sourceTarget = camera->renderTarget;
