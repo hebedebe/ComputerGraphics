@@ -43,6 +43,7 @@ public:
 	{
 		static_assert(std::is_base_of_v<Node, T>, "CreateNode type must be derived from base Node");
 		T* node = new T(args...);
+		node->SetTree(this);
 		QueueRegisterNode(node);
 		return node;
 	}

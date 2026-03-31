@@ -35,7 +35,9 @@ public:
 		ui->name = "Main Menu";
 		ui->AddContents([](float delta, size_t id)
 		{
-				ImGui::Button("Test");
+			ImGui::Button("Test");
 		});
+
+		ui->transform.dirtied.Connect(ui, [] {printf("ui node moved"); });
 	}
 };
