@@ -172,13 +172,13 @@ void ParticleEmitter::Update(const float deltaTime, const mat4& cameraTransform)
 			vec3 yAxis = cross(zAxis, xAxis);
 			mat4 billboard(vec4(xAxis, 0), vec4(yAxis, 0), vec4(zAxis, 0), vec4(0, 0, 0, 1));
 
-			m_vertexData[quad * 4 + 0].position =  m_vertexData[quad * 4 + 0].position + vec4(particle->position, 0);
+			m_vertexData[quad * 4 + 0].position = billboard * m_vertexData[quad * 4 + 0].position + vec4(particle->position, 0);
 			
-			m_vertexData[quad * 4 + 1].position =  m_vertexData[quad * 4 + 1].position + vec4(particle->position, 0);
+			m_vertexData[quad * 4 + 1].position = billboard * m_vertexData[quad * 4 + 1].position + vec4(particle->position, 0);
 			
-			m_vertexData[quad * 4 + 2].position =  m_vertexData[quad * 4 + 2].position + vec4(particle->position, 0);
+			m_vertexData[quad * 4 + 2].position = billboard * m_vertexData[quad * 4 + 2].position + vec4(particle->position, 0);
 			
-			m_vertexData[quad * 4 + 3].position =  m_vertexData[quad * 4 + 3].position + vec4(particle->position, 0);
+			m_vertexData[quad * 4 + 3].position = billboard * m_vertexData[quad * 4 + 3].position + vec4(particle->position, 0);
 
 			quad++;
 		}

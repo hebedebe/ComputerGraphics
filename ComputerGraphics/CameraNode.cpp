@@ -98,7 +98,7 @@ void CameraNode::PreDraw()
 
 glm::mat4 CameraNode::GetViewMatrix()
 {
-	return GlobalTransform().GetMatrix();
+	return inverse(GlobalTransform().GetMatrix());
 }
 
 glm::mat4 CameraNode::GetProjectionMatrix() const

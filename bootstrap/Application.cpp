@@ -14,8 +14,7 @@ Application::Application()
 	m_fps(0) {
 }
 
-Application::~Application() {
-}
+Application::~Application() = default;
 
 bool Application::createWindow(const char* title, int width, int height, bool fullscreen) {
 
