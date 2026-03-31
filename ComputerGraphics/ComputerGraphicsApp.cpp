@@ -85,7 +85,7 @@ void ComputerGraphicsApp::draw()
 
 	m_nodeTree->PostDraw();
 
-	Gizmos::draw(m_projectionMatrix * m_viewMatrix);
+	if (m_debug) Gizmos::draw(m_projectionMatrix * m_viewMatrix);
 }
 
 NodeTree* ComputerGraphicsApp::GetTree() const

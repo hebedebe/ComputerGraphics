@@ -77,7 +77,7 @@ void Node::AddChild(Node* actor)
 
 std::string Node::GetUniqueName()
 {
-	return std::format("{}_{}", name, reinterpret_cast<unsigned long long>(this));
+	return std::format("{}##{}", name, reinterpret_cast<unsigned long long>(this));
 }
 
 Transform Node::GlobalTransform()

@@ -45,7 +45,6 @@ void NodeTree::PreDraw()
 
 void NodeTree::Draw() const
 {
-	if (not m_activeCamera) return;
 
 	const auto app = ComputerGraphicsApp::Get();
 
@@ -56,6 +55,8 @@ void NodeTree::Draw() const
 		environment.backgroundColor.b
 	);
 	app->clearScreen();
+
+	if (not m_activeCamera) return;
 
 	for (const auto node : m_nodes)
 	{

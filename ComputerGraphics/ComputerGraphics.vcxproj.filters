@@ -108,6 +108,9 @@
     <ClCompile Include="ParticleSystemNode.cpp">
       <Filter>Source Files\Nodes</Filter>
     </ClCompile>
+    <ClCompile Include="UINode.cpp">
+      <Filter>Source Files\Nodes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h">
@@ -185,8 +188,8 @@
     <ClInclude Include="ParticleEmitter.h">
       <Filter>Header Files\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="TestLoader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="UINode.h">
+      <Filter>Header Files\Nodes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

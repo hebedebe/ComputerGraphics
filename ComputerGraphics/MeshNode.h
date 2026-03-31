@@ -34,7 +34,7 @@ public:
     };
 
 public:
-    MeshNode(const Transform& transform, Node* parent = nullptr, std::string name = "MeshNode");
+    _NODE_DEFAULT_CONSTRUCTOR(MeshNode)
 
 public:
     void Draw() override;
@@ -71,7 +71,7 @@ protected:
     aie::OBJMesh m_meshObj;
     Mesh m_mesh;
     aie::ShaderProgram m_shaderProgram;
-    shader_bind_function m_shaderBindFunction;
+    shader_bind_function m_shaderBindFunction = StandardBindFunction;
 
     MeshType m_meshType;
 };

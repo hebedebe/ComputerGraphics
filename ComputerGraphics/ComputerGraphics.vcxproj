@@ -26,7 +26,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -39,7 +39,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
@@ -193,6 +193,7 @@
     <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="UINode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraNode.h" />
@@ -218,12 +219,17 @@
     <ClInclude Include="RenderTarget.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Signal.h" />
-    <ClInclude Include="TestLoader.h" />
     <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="UINode.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Signal.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\bootstrap\Bootstrap.vcxproj">
+      <Project>{af59bb0b-e059-4773-83dc-728a949647da}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

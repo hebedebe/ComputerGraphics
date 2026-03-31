@@ -7,12 +7,15 @@
 #include "Transform.h"
 #include "Signal.h"
 
+#define _NODE_DEFAULT_CONSTRUCTOR(derivedClass) derivedClass(Transform transform = Transform(), Node* parent = nullptr, std::string name = #derivedClass) \
+	:Node(transform, parent, name) {}
+
 class NodeTree;
 
 class Node
 {
 public:
-	explicit Node(Transform transform, Node* parent = nullptr, std::string name = "Node");
+	explicit Node(Transform transform = Transform(), Node* parent = nullptr, std::string name = "Node");
 	virtual ~Node();
 
 public:

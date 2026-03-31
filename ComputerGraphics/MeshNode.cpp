@@ -6,11 +6,6 @@
 #include "CameraNode.h"
 #include "ComputerGraphicsApp.h"
 
-MeshNode::MeshNode(const Transform& transform, Node* parent, std::string name)
-	:Node(transform, parent, std::move(name)), m_shaderBindFunction(StandardBindFunction)
-{
-}
-
 void MeshNode::Draw()
 {
 	Node::Draw();

@@ -6,16 +6,12 @@
 #include <crtdbg.h>
 #endif
 
-#include "TestLoader.h"
-
 int main() {
 	//_CrtSetBreakAlloc(343);
 
 	// allocation
 	ComputerGraphicsApp* app = ComputerGraphicsApp::Get();
 	
-	app->startupCompleteSignal.ConnectOneshot(_WRAP_ARGLESS(Loader::StaticLoad<TestLoader>();));
-
 	// initialise and loop
 	app->run("AIE", 1280, 720, false);
 
