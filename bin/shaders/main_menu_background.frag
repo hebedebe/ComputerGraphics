@@ -9,6 +9,7 @@ out vec4 FragColour;
 
 void main() 
 {
-    float strength = sin(distance(vTexCoord, vec2(0.5)) * 5 + Time) + 1;
-    FragColour = vec4(strength * 0.5);
+    float strength = sin(tan(distance(vTexCoord, vec2(0.5))) + Time) + 1;
+
+    FragColour = vec4(vec3(strength * 0.5) - distance(vTexCoord, vec2(0.5)), 1);
 }
