@@ -7,7 +7,7 @@ class NodeTree;
 class Loader
 {
 public:
-	virtual ~Loader() = default;
+	virtual ~Loader();
 
 public:
 	void Load(NodeTree* tree = nullptr);

@@ -41,6 +41,8 @@ public:
 	void SetDebug(const bool debug) { m_debug = debug; }
 	bool GetDebug() const { return m_debug; }
 
+	mat4 GetBasePvm() const { return m_projectionMatrix * m_viewMatrix; }
+
 public:
 	Signal<ComputerGraphicsApp*> startupCompleteSignal;
 

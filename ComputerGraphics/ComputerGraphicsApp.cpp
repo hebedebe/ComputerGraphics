@@ -6,16 +6,10 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
-#include "CameraNode.h"
 #include "Gizmos.h"
 #include "Input.h"
-#include "LightNode.h"
 #include "Node.h"
-#include "MeshNode.h"
 #include "NodeTree.h"
-#include "PostProcessNode.h"
-#include "ProfilerNode.h"
-#include "Transform.h"
 
 using glm::vec3;
 using glm::vec4;
@@ -48,6 +42,7 @@ bool ComputerGraphicsApp::startup() {
 void ComputerGraphicsApp::shutdown() 
 {
 	delete m_nodeTree;
+	m_nodeTree = nullptr;
 	Gizmos::destroy();
 }
 

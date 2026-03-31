@@ -177,6 +177,8 @@
     <ClCompile Include="CameraNode.cpp" />
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="Loader.cpp" />
+    <ClCompile Include="ParticleEmitter.cpp" />
+    <ClCompile Include="ParticleSystemNode.cpp" />
     <ClCompile Include="ProfilerNode.cpp" />
     <ClCompile Include="LightNode.cpp" />
     <ClCompile Include="MeshNode.cpp" />
@@ -196,6 +198,9 @@
     <ClInclude Include="CameraNode.h" />
     <ClInclude Include="Environment.h" />
     <ClInclude Include="Loader.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleEmitter.h" />
+    <ClInclude Include="ParticleSystemNode.h" />
     <ClInclude Include="ProfilerNode.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightNode.h" />
@@ -208,10 +213,12 @@
     <ClInclude Include="NodeTree.h" />
     <ClInclude Include="OBJMesh.h" />
     <ClInclude Include="PostProcessNode.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Range.h" />
     <ClInclude Include="RenderTarget.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Signal.h" />
+    <ClInclude Include="TestLoader.h" />
     <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>

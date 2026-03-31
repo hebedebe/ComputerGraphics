@@ -8,10 +8,7 @@ NodeTree::NodeTree() = default;
 
 NodeTree::~NodeTree()
 {
-	for (int i = 0; i < m_nodes.size(); i++)
-	{
-		m_nodes[i]->Free();
-	}
+	Clear();
 }
 
 void NodeTree::Tick(const float deltaTime)
@@ -83,10 +80,26 @@ void NodeTree::OverwriteFromLoader(Loader& loader)
 
 void NodeTree::Clear()
 {
-	for (int i = 0; i < m_nodes.size(); i++)
+	for (Node*& node : m_nodes)
 	{
-		m_nodes[i]->Free();
+		printf("Cleared node %s\n", node->GetUniqueName().c_str());
+		delete node;
+		//node = nullptr;
 	}
+
+	for (Node*& node : m_freeQueue)
+	{
+		printf("Cleared node %s\n", node->GetUniqueName().c_str());
+		delete node;
+		//node = nullptr;
+	}
+
+	m_nodes.clear();
+	m_postDrawNodes.clear();
+	m_preDrawNodes.clear();
+	m_activeCamera = nullptr;
+	m_addQueue.clear();
+	m_freeQueue.clear();
 }
 
 void NodeTree::AddToFreeQueue(Node* node)

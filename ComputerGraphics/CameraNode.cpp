@@ -13,7 +13,18 @@ CameraNode::CameraNode(const Transform& transform, Node* parent, std::string nam
 void CameraNode::Ready()
 {
 	Node::Ready();
-
+	if (m_active != m_desiredActive)
+	{
+		m_active = m_desiredActive;
+		if (m_active)
+		{
+			m_tree->RegisterPreDraw(this);
+			const auto app = ComputerGraphicsApp::Get();
+			m_tree->SetActiveCamera(this);
+			app->SetProjectionMatrix(GetProjectionMatrix());
+			app->SetViewMatrix(GetViewMatrix());
+		}
+	}
 }
 
 void CameraNode::Tick(const float delta)

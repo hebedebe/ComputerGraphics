@@ -4,6 +4,7 @@
 #include <map>
 
 #define _SIGNAL_FUNC std::function<void(Args...)>
+#define _WRAP_ARGLESS(contents) [](auto){contents}
 
 template <typename... Args>
 class Signal final
@@ -15,7 +16,7 @@ public:
 	void Connect(void* source, _SIGNAL_FUNC func);
 	void ConnectOneshot(_SIGNAL_FUNC func);
 	void Disconnect(void* source);
-
+	
 	void Emit(Args... args);
 
 protected:

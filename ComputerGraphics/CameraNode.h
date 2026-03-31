@@ -13,7 +13,7 @@ public:
 	};
 
 public:
-	explicit CameraNode(const Transform& transform, Node* parent = nullptr, std::string name = "Camera");
+	explicit CameraNode(const Transform& transform = Transform(), Node* parent = nullptr, std::string name = "Camera");
 
 public:
 	void Ready() override;
@@ -26,6 +26,8 @@ public:
     void SetActive(bool active);
 
 	void InitRenderTarget();
+
+	void SetProjectionMode(const ProjectionMode projectionMode) { m_projectionMode = projectionMode; }
 
 public:
 	aie::RenderTarget* renderTarget = nullptr;
