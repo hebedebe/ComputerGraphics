@@ -5,6 +5,7 @@
 #include "../ComputerGraphics/Loader.h"
 #include "../ComputerGraphics/MeshNode.h"
 #include "../ComputerGraphics/NodeTree.h"
+#include "../ComputerGraphics/ProfilerNode.h"
 #include "../ComputerGraphics/UINode.h"
 
 class MainMenu : public Loader
@@ -39,5 +40,7 @@ public:
 		});
 
 		ui->transform.dirtied.Connect(ui, [] {printf("ui node moved"); });
+
+		tree->CreateNode<ProfilerNode>();
 	}
 };
