@@ -33,37 +33,37 @@ void MeshNode::Ready()
 void MeshNode::LoadMesh(const char* filename, const bool loadTextures, const bool flipTextureV)
 {
 	if (m_meshObj.load(filename, loadTextures, flipTextureV))
-	{
 		SetMesh(m_meshObj);
-	}
 	else
-	{
 		throw std::exception("Mesh loading error.");
-	}
 }
 
 void MeshNode::LoadShader(const aie::eShaderStage shaderStage, const char* filename)
 {
 	if (!m_shaderProgram.loadShader(shaderStage, filename))
-	{
 		throw std::exception(std::format("Failed to load shader at {}", filename).c_str());
-	}
 }
 
 void MeshNode::LinkShader()
 {
 	if (!m_shaderProgram.link())
 	{
-		printf(std::format("Shader error: {}", m_shaderProgram.getLastError()).c_str());
-		throw std::exception(std::format("Shader error: {}", m_shaderProgram.getLastError()).c_str());
+		const auto errorMessage = std::format("Shader error: {}", m_shaderProgram.getLastError());
+		printf("%s", errorMessage.c_str());
+		throw std::exception(errorMessage.c_str());
 	}
+}
+
+void MeshNode::InitialiseTwinShader(const char* shaderPath)
+{
+	LoadShader(aie::eShaderStage::VERTEX, std::format("{}.vert", shaderPath).c_str());
+	LoadShader(aie::eShaderStage::FRAGMENT, std::format("{}.frag", shaderPath).c_str());
+	LinkShader();
 }
 
 void MeshNode::InitialiseStandardShader()
 {
-	LoadShader(aie::eShaderStage::VERTEX, "./shaders/standard.vert");
-	LoadShader(aie::eShaderStage::FRAGMENT, "./shaders/standard.frag");
-	LinkShader();
+	InitialiseTwinShader("./shaders/standard");
 }
 
 

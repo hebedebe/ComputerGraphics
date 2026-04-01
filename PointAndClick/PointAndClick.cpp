@@ -1,10 +1,11 @@
 #include <iostream>
 
 #include "MainMenuLoader.h"
+
 #include "../ComputerGraphics/ComputerGraphicsApp.h"
 
 #ifdef _DEBUG
-#define _CRTDBG_MAP_ALLOC
+#define _CRTDBG_MAP_ALLOC  // NOLINT(clang-diagnostic-unused-macros)
 #include <cstdlib>
 #include <crtdbg.h>
 #endif

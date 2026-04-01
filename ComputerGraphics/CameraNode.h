@@ -13,7 +13,8 @@ public:
 	};
 
 public:
-	explicit CameraNode(const Transform& transform = Transform(), Node* parent = nullptr, std::string name = "Camera");
+	// _NODE_DEFAULT_CONSTRUCTOR(CameraNode)
+	explicit CameraNode(const Transform& _transform = Transform(), Node* _parent = nullptr, std::string _name = "Camera");
 
 public:
 	void Ready() override;

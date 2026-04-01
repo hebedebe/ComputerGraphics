@@ -104,7 +104,6 @@ vec3 Transform::GetScale() const
 
 void Transform::Move(const vec3 position)
 {
-	
 	SetPosition(m_position + position);
 }
 

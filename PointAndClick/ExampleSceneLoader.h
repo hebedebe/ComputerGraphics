@@ -10,13 +10,13 @@
 
 #include "../ComputerGraphics/ComputerGraphicsApp.h"
 
-class GameStartLoader : public Loader
+class ExampleSceneLoader : public Loader
 {
 public:
 	void OnLoad(NodeTree* tree) override
 	{
 		tree->environment.backgroundColor = vec3(0.25f);
-		tree->environment.ambientLight = _VEC3_ONE;
+		//tree->environment.ambientLight = _VEC3_ONE;
 		tree->environment.sunLight.diffuse = _VEC3_ONE;
 
 		CameraNode* playerCamera = tree->CreateNode<CameraNode>();
@@ -63,7 +63,47 @@ public:
 
 		MeshNode* bunny = tree->CreateNode<MeshNode>();
 		bunny->LoadMesh("./models/bunny.obj");
-		bunny->InitialiseStandardShader();
+		bunny->InitialiseTwinShader("./shaders/phong");
+		bunny->SetBindFunction([tree](aie::ShaderProgram& program, MeshNode* meshNode)
+		{
+				const auto app = ComputerGraphicsApp::Get();
+				//const auto tree = meshNode->GetTree();
+		
+				CameraNode* camera = tree->GetActiveCamera();
+		
+				Transform globalTransform = meshNode->GlobalTransform();
+				const glm::mat4 globalTransformMatrix = globalTransform.GetMatrix();
+		
+				// Bind light
+				program.bindUniform("AmbientColour", glm::vec3(tree->environment.ambientLight));
+				program.bindUniform("LightDirection", tree->environment.sunLight.direction);
+				program.bindUniform("LightColour", tree->environment.sunLight.diffuse);
+		
+				// Bind camera
+				program.bindUniform("CameraPosition", camera->GlobalTransform().GetPosition());
+		
+				// Bind material
+				program.bindUniform("Ka", meshNode->material.ambientColor);
+				program.bindUniform("Kd", meshNode->material.diffuseColor);
+				program.bindUniform("Ks", meshNode->material.specularColor);
+				program.bindUniform("specularPower", meshNode->material.specularPower);
+		
+				// Bind transform
+				const auto pvm = app->GetProjectionMatrix() * app->GetViewMatrix() * globalTransformMatrix;
+				program.bindUniform("ProjectionViewModel", pvm);
+		
+				// Bind normal
+				program.bindUniform("NormalMatrix", glm::inverseTranspose(glm::mat3(globalTransformMatrix)));
+		
+				// Bind model
+				program.bindUniform("ModelMatrix", globalTransformMatrix);
+		
+				const int numLights = tree->environment.registeredLights;
+				program.bindUniform("numLights", numLights);
+				program.bindUniform("PointLightPosition", numLights, tree->environment.pointLightPositions);
+				program.bindUniform("PointLightColour", numLights, tree->environment.pointLightColours);
+		
+		});
 		bunny->transform.Move({ 0,0,40 });
 		bunny->transform.SetScale(vec3(0.3f));
 

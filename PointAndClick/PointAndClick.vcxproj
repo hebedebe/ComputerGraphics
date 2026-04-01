@@ -156,7 +156,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameStartLoader.h" />
+    <ClInclude Include="ExampleSceneLoader.h" />
     <ClInclude Include="LoadingSceneLoader.h" />
     <ClInclude Include="MainMenuLoader.h" />
     <ClInclude Include="PathNode.h" />

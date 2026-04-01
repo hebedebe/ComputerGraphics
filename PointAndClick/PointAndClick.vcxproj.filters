@@ -38,7 +38,7 @@
     <ClInclude Include="MainMenuLoader.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="GameStartLoader.h">
+    <ClInclude Include="ExampleSceneLoader.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="PathNode.h">

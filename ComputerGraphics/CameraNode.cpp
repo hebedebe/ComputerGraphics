@@ -5,8 +5,8 @@
 #include "ComputerGraphicsApp.h"
 #include "imgui.h"
 
-CameraNode::CameraNode(const Transform& transform, Node* parent, std::string name)
-	:Node(transform, parent, std::move(name))
+CameraNode::CameraNode(const Transform& _transform, Node* _parent, std::string _name)
+	:Node(_transform, _parent, std::move(_name))
 {
 	CalculateAspectRatio();
 }
@@ -141,8 +141,8 @@ bool CameraNode::IsValidAspectRatio() const
 	const auto app = ComputerGraphicsApp::Get();
 	
 	return
-		width == app->GetWindowWidth() &&
-		height == app->GetWindowHeight();
+		(uint)width == app->GetWindowWidth() &&
+		(uint)height == app->GetWindowHeight();
 }
 
 void CameraNode::SetActive(const bool active)

@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../ComputerGraphics/Loader.h"
+#include "ExampleSceneLoader.h"
 
+#include "../ComputerGraphics/Loader.h"
 #include "../ComputerGraphics/UINode.h"
 
 class LoadingSceneLoader : public Loader
@@ -19,10 +20,10 @@ public:
 		ui->AddContents([tree](float delta, size_t index)
 			{
 				ImGui::Text("Loading...");
-				static int framesPassed = 0;
+				static uint framesPassed = 0;  // NOLINT(clang-diagnostic-unique-object-duplication)
 				framesPassed++;
 				if (framesPassed > 1)
-					Loader::StaticLoadOverride<GameStartLoader>(tree);
+					Loader::StaticLoadOverride<ExampleSceneLoader>(tree);
 			});
 	}
 };

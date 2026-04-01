@@ -1,7 +1,8 @@
 #pragma once
-#include "GameStartLoader.h"
+
 #include "imgui.h"
 #include "LoadingSceneLoader.h"
+
 #include "../ComputerGraphics/CameraNode.h"
 #include "../ComputerGraphics/ComputerGraphicsApp.h"
 #include "../ComputerGraphics/Loader.h"
