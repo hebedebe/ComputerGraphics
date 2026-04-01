@@ -4,12 +4,14 @@ class MotionNode :
     public Node
 {
 public:
-    MotionNode(const Transform& transform, Transform motionTransform, Node* parent = nullptr, std::string name = "MotionNode");
+    _NODE_DEFAULT_CONSTRUCTOR(MotionNode);
 
 public:
     void Tick(float delta) override;
 
 public:
-    Transform motionTransform;
+    vec3 translateMotion = _VEC3_ZERO;
+	vec3 rotateMotion = _VEC3_ZERO;
+    vec3 scaleMotion = _VEC3_ZERO;
 };
 

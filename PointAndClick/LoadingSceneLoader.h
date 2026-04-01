@@ -21,7 +21,7 @@ public:
 			{
 				ImGui::Text("Loading...");
 				static uint framesPassed = 0;  // NOLINT(clang-diagnostic-unique-object-duplication)
-				framesPassed++;
+				framesPassed++; //ensures that there is at least one frame for the loading text to render
 				if (framesPassed > 1)
 					Loader::StaticLoadOverride<ExampleSceneLoader>(tree);
 			});

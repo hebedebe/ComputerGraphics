@@ -9,6 +9,7 @@
 #include "../ComputerGraphics/UINode.h"
 
 #include "../ComputerGraphics/ComputerGraphicsApp.h"
+#include "../ComputerGraphics/MotionNode.h"
 
 class ExampleSceneLoader : public Loader
 {
@@ -106,6 +107,10 @@ public:
 		});
 		bunny->transform.Move({ 0,0,40 });
 		bunny->transform.SetScale(vec3(0.3f));
+		
+		MotionNode* bunnyMoveNode = tree->CreateNode<MotionNode>();
+		bunnyMoveNode->rotateMotion.y = 45.f;
+		bunny->AddChild(bunnyMoveNode);
 
 		UiNode* ui = tree->CreateNode<UiNode>();
 		ui->windowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize;

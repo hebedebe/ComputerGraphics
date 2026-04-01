@@ -1,11 +1,5 @@
 #include "MotionNode.h"
 
-#include <utility>
-
-MotionNode::MotionNode(const Transform& transform, Transform motionTransform, Node* parent, std::string name)
-	:Node(transform, parent, std::move(name)), motionTransform(std::move(motionTransform))
-{
-}
 
 void MotionNode::Tick(const float delta)
 {
@@ -13,8 +7,8 @@ void MotionNode::Tick(const float delta)
 
 	if (parent)
 	{
-		parent->transform.Move(motionTransform.GetPosition() * delta);
-		parent->transform.RotateDegrees(motionTransform.GetRotationRadians() * delta);
-		parent->transform.AddScale(motionTransform.GetScale() * delta);
+		parent->transform.AddScale(scaleMotion * delta);
+		parent->transform.Move(translateMotion * delta);
+		parent->transform.RotateDegrees(rotateMotion * delta);
 	}
 }
