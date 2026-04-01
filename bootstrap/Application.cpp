@@ -16,7 +16,7 @@ Application::Application()
 
 Application::~Application() = default;
 
-bool Application::createWindow(const char* title, int width, int height, bool fullscreen) {
+bool Application::CreateApplicationWindow(const char* title, int width, int height, bool fullscreen) {
 
 	if (glfwInit() == GL_FALSE)
 		return false;
@@ -54,7 +54,7 @@ bool Application::createWindow(const char* title, int width, int height, bool fu
 	return true;
 }
 
-void Application::destroyWindow() {
+void Application::DestroyApplicationWindow() {
 
 	ImGui_Shutdown();
 	Input::destroy();
@@ -63,11 +63,11 @@ void Application::destroyWindow() {
 	glfwTerminate();
 }
 
-void Application::run(const char* title, int width, int height, bool fullscreen) {
+void Application::Run(const char* title, int width, int height, bool fullscreen) {
 
 	// start game loop if successfully initialised
-	if (createWindow(title,width,height, fullscreen) &&
-		startup()) {
+	if (CreateApplicationWindow(title,width,height, fullscreen) &&
+		Startup()) {
 
 		// variables for timing
 		double prevTime = glfwGetTime();
@@ -109,9 +109,9 @@ void Application::run(const char* title, int width, int height, bool fullscreen)
 			// clear imgui
 			ImGui_NewFrame();
 
-			update(float(deltaTime));
+			Update(float(deltaTime));
 
-			draw();
+			Draw();
 
 			// draw IMGUI last
 			ImGui::Render();
@@ -125,43 +125,43 @@ void Application::run(const char* title, int width, int height, bool fullscreen)
 	}
 
 	// cleanup
-	shutdown();
-	destroyWindow();
+	Shutdown();
+	DestroyApplicationWindow();
 }
 
-bool Application::hasWindowClosed() {
+bool Application::HasWindowClosed() {
 	return glfwWindowShouldClose(m_window) == GL_TRUE;
 }
 
-void Application::clearScreen() {
+void Application::ClearScreen() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-void Application::setBackgroundColour(float r, float g, float b, float a) {
+void Application::SetBackgroundColour(float r, float g, float b, float a) {
 	glClearColor(r, g, b, a);
 }
 
-void Application::setVSync(bool enable) {
+void Application::SetVSync(bool enable) {
 	glfwSwapInterval(enable ? 1 : 0);
 }
 
-void Application::setShowCursor(bool visible) {
+void Application::SetShowCursor(bool visible) {
 	ShowCursor(visible);
 }
 
-unsigned int Application::getWindowWidth() const {
+unsigned int Application::GetWindowWidth() const {
 	int w = 0, h = 0;
 	glfwGetWindowSize(m_window, &w, &h);
 	return w;
 }
 
-unsigned int Application::getWindowHeight() const {
+unsigned int Application::GetWindowHeight() const {
 	int w = 0, h = 0;
 	glfwGetWindowSize(m_window, &w, &h);
 	return h;
 }
 
-float Application::getTime() const {
+float Application::GetTime() const {
 	return (float)glfwGetTime();
 }
 

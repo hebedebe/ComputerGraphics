@@ -8,6 +8,7 @@
 CameraNode::CameraNode(const Transform& transform, Node* parent, std::string name)
 	:Node(transform, parent, std::move(name))
 {
+	CalculateAspectRatio();
 }
 
 void CameraNode::Ready()
@@ -59,9 +60,17 @@ void CameraNode::Tick(const float delta)
 		ImGui::SliderFloat3("Position", value_ptr(position), -moveSpeed, moveSpeed);
 		ImGui::SliderFloat3("Rotation", value_ptr(rotation), -rotationSpeed, rotationSpeed);
 
+		if (ImGui::Button("Reset transform"))
+			transform.Reset();
+
 		ImGui::SliderFloat("Fov", &fov, 1, 179);
+
 		ImGui::SliderFloat("Width", &width, 1, 100);
 		ImGui::SliderFloat("Height", &height, 1, 100);
+		if (ImGui::Button("Recalculate aspect ratio"))
+			CalculateAspectRatio();
+		if (!IsValidAspectRatio())
+			ImGui::TextColored(_RED, "Aspect ratio is invalid! Recalculate it or set it manually.");
 
 		ImGui::TextWrapped("%s", transform.ToString().c_str());
 		ImGui::End();
@@ -119,6 +128,23 @@ glm::mat4 CameraNode::GetProjectionMatrix() const
 	throw std::exception("Camera has invalid projection mode.");
 }
 
+void CameraNode::CalculateAspectRatio()
+{
+	const auto app = ComputerGraphicsApp::Get();
+
+	width = (float)app->GetWindowWidth();
+	height = (float)app->GetWindowHeight();
+}
+
+bool CameraNode::IsValidAspectRatio() const
+{
+	const auto app = ComputerGraphicsApp::Get();
+	
+	return
+		width == app->GetWindowWidth() &&
+		height == app->GetWindowHeight();
+}
+
 void CameraNode::SetActive(const bool active)
 {
 	m_desiredActive = active;
@@ -128,7 +154,7 @@ void CameraNode::InitRenderTarget()
 {
 	const auto app = ComputerGraphicsApp::Get();
 	renderTarget = new aie::RenderTarget;
-	if (!renderTarget->initialise(1, app->getWindowWidth(), app->getWindowHeight()))
+	if (!renderTarget->initialise(1, app->GetWindowWidth(), app->GetWindowHeight()))
 	{
 		printf("Render target error!\n");
 	}

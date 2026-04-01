@@ -1,6 +1,7 @@
 #include "NodeTree.h"
 
 #include "ComputerGraphicsApp.h"
+#include "Loader.h"
 #include "Node.h"
 
 
@@ -31,6 +32,12 @@ void NodeTree::Tick(const float deltaTime)
 		node->Free();
 	}
 	m_freeQueue.clear();
+
+	for (const auto& func : m_queuedFunctions)
+	{
+		func();
+	}
+	m_queuedFunctions.clear();
 }
 
 void NodeTree::PreDraw()
@@ -48,13 +55,13 @@ void NodeTree::Draw() const
 
 	const auto app = ComputerGraphicsApp::Get();
 
-	app->setBackgroundColour
+	app->SetBackgroundColour
 	(
 		environment.backgroundColor.r,
 		environment.backgroundColor.g,
 		environment.backgroundColor.b
 	);
-	app->clearScreen();
+	app->ClearScreen();
 
 	if (not m_activeCamera) return;
 
@@ -73,26 +80,24 @@ void NodeTree::PostDraw()
 	}
 }
 
-void NodeTree::OverwriteFromLoader(Loader& loader)
+void NodeTree::QueueFunction(const std::function<void()>& func)
 {
-	Clear();
-	loader.Load(this);
+	m_queuedFunctions.emplace_back(func);
 }
 
 void NodeTree::Clear()
 {
-	for (Node*& node : m_nodes)
+	for (constexpr size_t i = 0; i < m_nodes.size();)
 	{
-		printf("Cleared node %s\n", node->GetUniqueName().c_str());
-		delete node;
-		//node = nullptr;
+		printf("Cleared node %s\n", m_nodes[0]->GetUniqueName().c_str());
+		m_nodes[0]->Free();
 	}
 
-	for (Node*& node : m_freeQueue)
+	for (Node*& node : m_addQueue)
 	{
 		printf("Cleared node %s\n", node->GetUniqueName().c_str());
 		delete node;
-		//node = nullptr;
+		node = nullptr;
 	}
 
 	m_nodes.clear();
@@ -115,7 +120,7 @@ void NodeTree::QueueRegisterNode(Node* node)
 
 void NodeTree::RegisterNode(Node* node)
 {
-	printf("Registered node\n");
+	printf("Registered node %s\n", node->GetUniqueName().c_str());
 	m_nodes.emplace_back(node);
 	node->SetTree(this);
 	node->Ready();
@@ -123,9 +128,12 @@ void NodeTree::RegisterNode(Node* node)
 
 void NodeTree::RemoveNode(Node* node)
 {
-	m_nodes.erase(std::ranges::find(m_nodes, node));
-	RemovePreDraw(node);
-	RemovePostDraw(node);
+	if (const auto iter = std::ranges::find(m_nodes, node); iter != m_nodes.end())
+	{
+		m_nodes.erase(iter);
+		RemovePreDraw(node);
+		RemovePostDraw(node);
+	}
 }
 
 void NodeTree::RegisterPreDraw(Node* node)

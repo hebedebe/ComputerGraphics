@@ -2,7 +2,8 @@
 
 #include <vector>
 #include "Environment.h"
-#include "Loader.h"
+// #include "Loader.h"
+// #include "Node.h"
 
 class CameraNode;
 class Node;
@@ -22,7 +23,7 @@ public:
 	void PostDraw();
 
 public:
-	void OverwriteFromLoader(Loader& loader);
+	void QueueFunction(const std::function<void()>& func);
 
 	void Clear();
 
@@ -50,7 +51,7 @@ public:
 
 public:
 	void SetActiveCamera(CameraNode* camera) { m_activeCamera = camera; }
-	CameraNode* GetActiveCamera() const { return m_activeCamera; }
+	[[nodiscard]] CameraNode* GetActiveCamera() const { return m_activeCamera; }
 
 public:
 	Environment environment;
@@ -66,5 +67,7 @@ protected:
 
 protected:
 	CameraNode* m_activeCamera = nullptr;
+
+	std::vector<std::function<void()>> m_queuedFunctions;
 };
 

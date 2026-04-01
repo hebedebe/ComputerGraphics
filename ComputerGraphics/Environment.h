@@ -16,7 +16,7 @@ public:
 
 public:
 	Light sunLight{
-		.diffuse = {0.f, 1.f, 0.f},
+		.diffuse = _VEC3_ONE,
 		.specular = _VEC3_ONE,
 		.direction = _VEC3_ONE
 	};

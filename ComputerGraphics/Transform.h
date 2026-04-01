@@ -35,6 +35,11 @@ public:
 	void SetMatrix(const glm::mat4& matrix);
 	glm::mat4 GetMatrix();
 
+	void Reset(); //Resets matrix to identity
+
+public:
+	static glm::mat4 Identity();
+
 public:
 	Transform operator* (Transform& other);
 

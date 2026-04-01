@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <glm/glm.hpp>        // for glm::vec2, etc. We use it in our public API (ImVec2, ImVec4) because it is so widely used and so convenient.
+
 #if !defined(IMGUI_DISABLE_INCLUDE_IMCONFIG_H) || defined(IMGUI_INCLUDE_IMCONFIG_H)
 #include "imconfig.h"       // User-editable configuration file
 #endif
@@ -100,6 +102,7 @@ struct ImVec4
     float x, y, z, w;
     ImVec4() { x = y = z = w = 0.0f; }
     ImVec4(float _x, float _y, float _z, float _w) { x = _x; y = _y; z = _z; w = _w; }
+	ImVec4(glm::vec4 v) { x = v.x; y = v.y; z = v.z; w = v.w; }
 #ifdef IM_VEC4_CLASS_EXTRA          // Define constructor and implicit cast operators in imconfig.h to convert back<>forth from your math types and ImVec4.
     IM_VEC4_CLASS_EXTRA
 #endif

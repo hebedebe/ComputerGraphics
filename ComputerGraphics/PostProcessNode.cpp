@@ -55,7 +55,7 @@ void PostProcessNode::PostDraw()
 
 	if (outputTarget) outputTarget->bind();
 
-	app->clearScreen();
+	app->ClearScreen();
 	
 	m_shader.bind();
 	m_shader.bindUniform("colourTarget", 0);
@@ -82,7 +82,7 @@ void PostProcessNode::InitOutputTarget()
 {
 	const auto app = ComputerGraphicsApp::Get();
 	outputTarget = new aie::RenderTarget;
-	if (!outputTarget->initialise(1, app->getWindowWidth(), app->getWindowHeight()))
+	if (!outputTarget->initialise(1, app->GetWindowWidth(), app->GetWindowHeight()))
 	{
 		printf("An error occured initialising a postprocess node output render target.\n");
 	}

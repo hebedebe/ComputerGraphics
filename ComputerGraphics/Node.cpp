@@ -20,6 +20,7 @@ Node::~Node()
 
 	for (auto &child : children)
 	{
+		child->parent = nullptr;
 		child->Free();
 		child = nullptr;
 	}
@@ -61,6 +62,7 @@ void Node::QueueFree()
 void Node::RemoveChild(Node* actor)
 {
 	actor->parent = nullptr;
+	transform.dirtied.Disconnect(actor);
 	children.erase(std::ranges::find(children, actor));
 }
 
@@ -72,6 +74,7 @@ void Node::AddChild(Node* actor)
 	}
 
 	actor->parent = this;
+	transform.dirtied.Connect(actor, [actor] {actor->transform.MakeDirty();});
 	children.emplace_back(actor);
 }
 

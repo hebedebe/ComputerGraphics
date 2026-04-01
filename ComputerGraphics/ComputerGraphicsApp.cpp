@@ -24,29 +24,29 @@ ComputerGraphicsApp* ComputerGraphicsApp::Get()
 	return app;
 }
 
-bool ComputerGraphicsApp::startup() {
+bool ComputerGraphicsApp::Startup() {
 
-	const auto startTime = getTime();
-	setBackgroundColour(0.25f, 0.25f, 0.25f);
+	const auto startTime = GetTime();
+	SetBackgroundColour(0.25f, 0.25f, 0.25f);
 
 	// initialise gizmo primitive counts
 	Gizmos::create(10000, 10000, 10000, 10000);
 
-	std::cout << "Startup completed in " << getTime() - startTime << " seconds\n";
+	std::cout << "Startup completed in " << GetTime() - startTime << " seconds\n";
 
 	startupCompleteSignal.Emit(this);
 
 	return true;
 }
 
-void ComputerGraphicsApp::shutdown() 
+void ComputerGraphicsApp::Shutdown() 
 {
 	delete m_nodeTree;
 	m_nodeTree = nullptr;
 	Gizmos::destroy();
 }
 
-void ComputerGraphicsApp::update(float deltaTime) {
+void ComputerGraphicsApp::Update(float deltaTime) {
 
 	// wipe the gizmos clean for this frame
 	Gizmos::clear();
@@ -68,18 +68,18 @@ void ComputerGraphicsApp::update(float deltaTime) {
 
 	if (m_nodeTree) m_nodeTree->Tick(deltaTime);
 
-	// quit if we press escape
+	// Quit if we press escape
 	aie::Input* input = aie::Input::getInstance();
 
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
-		quit();
+		Quit();
 
 	if (input->wasKeyPressed(aie::INPUT_KEY_GRAVE_ACCENT))
 		m_debug = !m_debug;
 
 }
 
-void ComputerGraphicsApp::draw() 
+void ComputerGraphicsApp::Draw() 
 {
 	m_nodeTree->PreDraw();
 

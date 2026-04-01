@@ -2,7 +2,9 @@
 
 #include <concepts>
 
-class NodeTree;
+#include "NodeTree.h"
+
+// class NodeTree;
 
 class Loader
 {
@@ -23,6 +25,18 @@ public:
 		T* loader = new T;
 		loader->Load(tree);
 		delete loader;
+	}
+
+	template<typename T>
+	static void StaticLoadOverride(NodeTree* tree)
+		requires (std::is_base_of_v<Loader, T>)
+	{
+		T* loader = new T;
+		tree->QueueFunction([loader, tree] {
+			tree->Clear();
+			loader->Load(tree);
+			delete loader;
+		});
 	}
 
 protected:

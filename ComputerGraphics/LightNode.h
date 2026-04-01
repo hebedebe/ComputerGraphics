@@ -8,6 +8,7 @@ class LightNode :
     public Node
 {
 public:
+	_NODE_DEFAULT_CONSTRUCTOR(LightNode)
     explicit LightNode(const Transform& transform, Node* parent = nullptr, std::string name = "Light", const Light& light = {
 	                       .diffuse = glm::vec3{1,0,0}, .specular = glm::vec3{1}, .direction = glm::vec3{0}});
 
@@ -19,13 +20,14 @@ public:
     void Tick(float delta) override;
     void Draw() override;
 
+public:
+    Light lightData;
+
 protected:
     void OnDestroy() override;
     void RebuildLight();
 
 protected:
-    Light m_lightData;
-
     bool m_debug = false;
 };
 

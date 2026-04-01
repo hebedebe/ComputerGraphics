@@ -23,11 +23,11 @@ public:
 	~ComputerGraphicsApp() override;
 
 public:
-	bool startup() override;
-	void shutdown() override;
+	bool Startup() override;
+	void Shutdown() override;
 
-	void update(float deltaTime) override;
-	void draw() override;
+	void Update(float deltaTime) override;
+	void Draw() override;
 
 public:
 	[[nodiscard]] mat4 GetViewMatrix() const { return m_viewMatrix; }

@@ -139,6 +139,11 @@ mat4 Transform::GetMatrix()
 	return m_matrix;
 }
 
+void Transform::Reset()
+{
+	SetMatrix(Identity());
+}
+
 Transform Transform::operator*(Transform& other)
 {
 	const Transform result(GetMatrix() * other.GetMatrix());
@@ -164,4 +169,9 @@ void Transform::MakeDirty()
 void Transform::Clean()
 {
 	m_dirty = false;
+}
+
+glm::mat4 Transform::Identity()
+{
+	return mat4(1);
 }

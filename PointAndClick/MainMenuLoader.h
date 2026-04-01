@@ -1,5 +1,7 @@
 #pragma once
+#include "GameStartLoader.h"
 #include "imgui.h"
+#include "LoadingSceneLoader.h"
 #include "../ComputerGraphics/CameraNode.h"
 #include "../ComputerGraphics/ComputerGraphicsApp.h"
 #include "../ComputerGraphics/Loader.h"
@@ -28,15 +30,28 @@ public:
 		{
 			const auto app = ComputerGraphicsApp::Get();
 
-			program.bindUniform("Time", app->getTime());
+			program.bindUniform("Time", app->GetTime());
 		});
 
 
 		UiNode* ui = tree->CreateNode<UiNode>();
 		ui->name = "Main Menu";
-		ui->AddContents([](float delta, size_t id)
+		ui->windowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize;
+		ui->AddPreWindowFunction([](float delta, size_t id)
 		{
-			ImGui::Button("Test");
+				ImGui::SetNextWindowPosCenter();
+		});
+		ui->AddContents([tree](float delta, size_t id)
+		{
+			if (ImGui::Button("Play"))
+			{
+				Loader::StaticLoadOverride<LoadingSceneLoader>(tree);
+			}
+			
+			if (ImGui::Button("Quit"))
+			{
+				ComputerGraphicsApp::Get()->Quit();
+			}
 		});
 
 		ui->transform.dirtied.Connect(ui, [] {printf("ui node moved"); });

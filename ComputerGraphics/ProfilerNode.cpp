@@ -17,7 +17,7 @@ void ProfilerNode::Tick(float delta)
 	const auto app = ComputerGraphicsApp::Get();
 
 	ImGui::Begin("Profiler");
-	ImGui::Text("FPS: %u", app->getFPS());
+	ImGui::Text("FPS: %u", app->GetFps());
 	ImGui::Text("mspt: %f", delta * 1000);
 	ImGui::End();
 }

@@ -20,8 +20,12 @@ public:
 	void Tick(float delta) override;
 	void PreDraw() override;
 
+public:
     [[nodiscard]] glm::mat4 GetViewMatrix();
 	[[nodiscard]] glm::mat4 GetProjectionMatrix() const;
+
+	void CalculateAspectRatio();
+	bool IsValidAspectRatio() const;
 
     void SetActive(bool active);
 

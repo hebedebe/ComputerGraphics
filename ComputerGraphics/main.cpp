@@ -13,7 +13,7 @@ int main() {
 	ComputerGraphicsApp* app = ComputerGraphicsApp::Get();
 	
 	// initialise and loop
-	app->run("AIE", 1280, 720, false);
+	app->Run("AIE", 1280, 720, false);
 
 	// deallocation
 	delete app;

@@ -143,6 +143,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="PathNode.cpp" />
+    <ClCompile Include="PlayerNode.cpp" />
     <ClCompile Include="PointAndClick.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -154,7 +156,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameStartLoader.h" />
+    <ClInclude Include="LoadingSceneLoader.h" />
     <ClInclude Include="MainMenuLoader.h" />
+    <ClInclude Include="PathNode.h" />
+    <ClInclude Include="PlayerNode.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
